@@ -46,7 +46,7 @@ class UserController extends AbstractController
                 if ($e->getCode() === 1062) {
                     $this->addFlash('error', "User with Email: {$user->getEmail()} already exists");
                 }
-                
+
                 return $this->redirectToRoute('app_user_new', [], Response::HTTP_SEE_OTHER);
             }
         }
@@ -60,8 +60,13 @@ class UserController extends AbstractController
     #[Route('/profile-{id}', name: 'app_user_profile', methods: ['GET'])]
     public function show(User $user): Response
     {
-        return $this->render('user/show.html.twig', [
+        $form = $this->createForm(UserType::class, $user, [
+            'action' => $this->generateUrl('app_user_edit', ['id' => $user->getId()])
+        ]);
+
+        return $this->render('user/profile.html.twig', [
             'user' => $user,
+            'form' => $form->createView()
         ]);
     }
 

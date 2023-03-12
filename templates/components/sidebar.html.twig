@@ -1,0 +1,30 @@
+<div class="profile-sidebar h-100 bg-primary text-white rounded">
+	<ul class="p-5 d-flex flex-column">
+		
+        <li class="py-2 my-2">
+			<a href="{{path('app_user_profile',{'id':user.id})}}">Profile</a>
+		</li>
+
+        {% if is_granted('ROLE_ADMIN') %}
+			<li class="py-2 my-2">
+				<a  href="#">Admin Dashboard</a>
+			</li>
+		{% endif %}
+
+		{% if is_granted('ROLE_VENDOR') %}
+			<li class="py-2 my-2">
+				<a href="#">Vendor Dashboard</a>
+			</li>
+		{% endif %}
+
+		
+		<li class="py-2 my-2">
+			<a href="#">Orders</a>
+		</li>
+		<li class="py-2 my-2">
+			<a href="#">Payment Info</a>
+		</li>
+
+
+	</ul>
+</div>

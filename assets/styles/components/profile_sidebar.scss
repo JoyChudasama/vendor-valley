@@ -1,0 +1,29 @@
+.profile-sidebar {
+    ul {
+        li>a {
+            color: white !important;
+            padding: 1rem;
+        }
+
+        li:hover {
+            background-color: white;
+            border-radius: 1rem;
+
+            >a {
+                color: black !important;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .profile-sidebar {
+        height: auto !important;
+
+        ul {
+            flex-direction: row !important;
+            justify-content: space-around;
+            align-items: center;
+        }
+    }
+}
