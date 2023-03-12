@@ -1,6 +1,12 @@
-nav{
-    .navbar-brand{
+nav {
+    .navbar-brand {
         font-size: 1.6rem;
         font-weight: 600;
+    }
+
+    ul {
+        li>a {
+            color: black !important;
+        }
     }
 }
