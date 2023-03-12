@@ -1,4 +1,17 @@
+.button-container {
+    button {
+        width: 100%;
+    }
+}
+
+
 @media only screen and (min-width: 768px) {
+    .button-container {
+        p {
+            padding-top: 0.7rem;
+        }
+    }
+
     footer {
         position: absolute;
         bottom: 0;
@@ -9,6 +22,9 @@
     .button-container {
         button {
             width: 100%;
+        }
+        p {
+            padding-top: 1rem;
         }
     }
 }

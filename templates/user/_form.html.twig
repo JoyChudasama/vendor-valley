@@ -1,24 +1,29 @@
 <div>
-	{% for message in app.flashes('error')  %}
-		{{include('components/flash.html.twig',{flashType:'danger',flashMessage:message})}}
-	{% endfor %}
+	<div class="row">
+		<div class="col-12">
+			{% for message in app.flashes('error')  %}
+				{{include('components/flash.html.twig',{flashType:'danger',flashMessage:message})}}
+			{% endfor %}
+		</div>
+	</div>
 
 	{{ form_start(form) }}
 
 	<div class="row">
 		<div class="col-sm-12 col-md-6">
-			{{form_row(form.email)}}
+			{{form_row(form.email,{'attr':{'data-user-registration-target':'emailInput'}})}}
 		</div>
-		<div class="col-sm-12 col-md-6">
-			{{form_row(form.confirmEmail)}}
+		<div class="col-sm-12 col-md-6 has-validation">
+			{{form_row(form.confirmEmail,{'attr':{'data-user-registration-target':'confirmEmailInput','data-action':'user-registration#matchEmail'}})}}
 		</div>
+
 	</div>
 	<div class="row">
 		<div class="col-sm-12 col-md-6">
-			{{form_row(form.password)}}
+			{{form_row(form.password,{'attr':{'data-user-registration-target':'passwordInput'}})}}
 		</div>
 		<div class="col-sm-12 col-md-6">
-			{{form_row(form.confirmPassword)}}
+			{{form_row(form.confirmPassword,{'attr':{'data-user-registration-target':'confirmPasswordInput','data-action':'user-registration#matchPassword'}})}}
 		</div>
 	</div>
 	<div class="row">
@@ -43,9 +48,12 @@
 		</div>
 	</div>
 
-	<div class="row button-container">
-		<div class="col-sm-12 ">
-			<button class="btn btn-md btn-success">Register</button>
+	<div class="row button-container pt-3">
+		<div class="col-sm-12 col-md-3">
+			<button class="btn btn-md btn-success" data-user-registration-target="submitButton">Register</button>
+		</div>
+		<div class="col-sm-12 col-md-4 text-center">
+			<p>Already a Member? <a href="{{ path('app_login') }}">Login</a></p>
 		</div>
 	</div>
 
