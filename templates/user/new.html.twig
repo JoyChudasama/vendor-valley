@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{parent()}}
+	| Register
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{{ encore_entry_link_tags('user_new') }}
+{% endblock %}
+
+{% block body %}
+
+
+	<div class="container my-5 card p-5">
+
+		<h1 class="text-center fs-1 pb-5">Register</h1>
+
+		{{ include('user/_form.html.twig') }}
+
+
+	</div>
+
+{% endblock %}

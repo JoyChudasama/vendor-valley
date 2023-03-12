@@ -1,0 +1,56 @@
+<div>
+	{% for message in app.flashes('error')  %}
+		{{include('components/flash.html.twig',{flashType:'danger',flashMessage:message})}}
+	{% endfor %}
+
+	{{ form_start(form) }}
+
+	<div class="row">
+		<div class="col-sm-12 col-md-6">
+			{{form_row(form.email)}}
+		</div>
+		<div class="col-sm-12 col-md-6">
+			{{form_row(form.confirmEmail)}}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12 col-md-6">
+			{{form_row(form.password)}}
+		</div>
+		<div class="col-sm-12 col-md-6">
+			{{form_row(form.confirmPassword)}}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12 col-md-6">
+			{{form_row(form.firstName)}}
+		</div>
+		<div class="col-sm-12 col-md-6">
+			{{form_row(form.lastName)}}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12 col-md-12">
+			{{form_row(form.type)}}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12 col-md-6">
+			{{form_row(form.city)}}
+		</div>
+		<div class="col-sm-12 col-md-6">
+			{{form_row(form.province)}}
+		</div>
+	</div>
+
+	<div class="row button-container">
+		<div class="col-sm-12 ">
+			<button class="btn btn-md btn-success">Register</button>
+		</div>
+	</div>
+
+
+	{{ form_widget(form._token) }}
+	{{ form_end(form,{'render_rest':false}) }}
+
+</div>
