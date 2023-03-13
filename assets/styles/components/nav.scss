@@ -7,8 +7,16 @@ nav {
     }
 
     ul {
-        li>a {
-            color: black !important;
+        li {
+            cursor: pointer;
+            >a {
+
+                color: black !important;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
         }
     }
 }

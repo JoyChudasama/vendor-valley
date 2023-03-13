@@ -15,18 +15,13 @@ class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $user = $builder->getData();
+
         $builder
             ->add('email', EmailType::class, [
                 'required' => true
             ])
             ->add('confirmEmail', EmailType::class, [
-                'required' => true,
-                'mapped' => false
-            ])
-            ->add('password', PasswordType::class, [
-                'required' => true
-            ])
-            ->add('confirmPassword', PasswordType::class, [
                 'required' => true,
                 'mapped' => false
             ])
@@ -41,13 +36,26 @@ class UserType extends AbstractType
             ])
             ->add('province', TextType::class, [
                 'required' => false
-            ])
-            ->add('type', ChoiceType::class, [
+            ]);
+
+        if ($user->getType() === null || $user->getType() === User::TYPE_BUYER) {
+            $builder->add('type', ChoiceType::class, [
                 'required' => true,
                 'choices' => array_combine(User::getUserTypes(), User::getUserTypes()),
                 'label' => 'What you will be doing mainly?',
                 'placeholder' => 'Choose an option'
             ]);
+        }
+
+        if ($user->getId() === null) {
+            $builder->add('password', PasswordType::class, [
+                'required' => true
+            ])
+                ->add('confirmPassword', PasswordType::class, [
+                    'required' => true,
+                    'mapped' => false
+                ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void

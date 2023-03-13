@@ -1,4 +1,4 @@
-<div>
+<div {{stimulus_controller('profile')}}>
 	<div class="row">
 		<div class="col-12">
 			{% for message in app.flashes('error')  %}
@@ -7,7 +7,13 @@
 		</div>
 	</div>
 
-	{{ form_start(form) }}
+	{{ form_start(form,{'attr':{'data-profile-target':'form'}}) }}
+
+	<div class="row ">
+		<div class="col-12">
+			<button class="btn btn-md btn-primary float-end" data-action="profile#enableAllInputs" data-profile-target="editButton">Edit</button>
+		</div>
+	</div>
 
 	<div class="row">
 		<div class="col-sm-12 col-md-12">
@@ -16,41 +22,37 @@
 	</div>
 
 	<div class="row">
-		<div class="col-sm-12 col-md-6">
-			{{form_row(form.password)}}
-		</div>
-		<div class="col-sm-12 col-md-6">
-			{{form_row(form.confirmPassword)}}
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col-sm-12 col-md-6">
+		<div class="col-sm-12 col-md-12 col-lg-6">
 			{{form_row(form.firstName)}}
 		</div>
-		<div class="col-sm-12 col-md-6">
+		<div class="col-sm-12 col-md-12 col-lg-6">
 			{{form_row(form.lastName)}}
 		</div>
 	</div>
-	{% if not is_granted('ROLE_ADMIN') %}
+
+	{% if form.type is defined %}
 		<div class="row">
-			<div class="col-sm-12 col-md-12">
+			<div class="col-12">
 				{{form_row(form.type)}}
 			</div>
 		</div>
 	{% endif %}
+
 	<div class="row">
-		<div class="col-sm-12 col-md-6">
+		<div class="col-sm-12 col-md-12 col-lg-6">
 			{{form_row(form.city)}}
 		</div>
-		<div class="col-sm-12 col-md-6">
+		<div class="col-sm-12 col-md-12 col-lg-6">
 			{{form_row(form.province)}}
 		</div>
 	</div>
 
 	<div class="row button-container pt-3">
-		<div class="col-sm-12 col-md-3">
-			<button class="btn btn-md btn-success" data-user-registration-target="submitButton">Update</button>
+		<div class="col-sm-12 col-md-2">
+			<button class="btn btn-md btn-success" type="submit" data-profile-target="submitButton">Update</button>
+		</div>
+		<div class="col-sm-12 col-md-2">
+			<button class="btn btn-md btn-danger" data-action="profile#disableAllInputs" data-profile-target="cancelButton">Cancel</button>
 		</div>
 	</div>
 

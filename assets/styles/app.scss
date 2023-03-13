@@ -4,8 +4,7 @@
 
 
 $bgColor: white;
-$fontFamily : 'Montserrat',
-sans-serif;
+$fontFamily : 'Montserrat', sans-serif;
 
 * {
     margin: 0;
@@ -36,5 +35,18 @@ body {
     a {
         text-decoration: none;
         color: black;
+    }
+
+    .button-container {
+        button,a {
+            width: 100%;
+        }
+    }
+    
+}
+
+@media only screen and (max-width: 768px) {
+    body {
+        font-size: 1.2rem;
     }
 }
