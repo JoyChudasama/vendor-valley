@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
-import { isSame } from '../js/helper';
+import { isSame } from '../js/helper/helper_functions';
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {

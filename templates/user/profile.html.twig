@@ -18,7 +18,7 @@
 				{{include('components/sidebar.html.twig')}}
             </div>
 
-			<div class="col-sm-12 col-md-12 col-lg-9">
+			<div class="col-sm-12 col-md-12 col-lg-9" {{stimulus_controller('refresh')}} data-action="async-form:submitted-successfully->refresh#reloadContent">
 				{{include('user/_edit_form.html.twig',{form:form})}}
 			</div>
 		</div>

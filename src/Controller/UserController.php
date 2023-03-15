@@ -84,11 +84,12 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_user_profile', ['id' => $user->getId()]);
         }
 
-        return $this->render('user/edit.html.twig', [
+        return $this->render('user/_edit_form.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
         ]);
     }
+
 
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, UserRepository $userRepository): Response
