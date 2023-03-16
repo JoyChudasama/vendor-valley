@@ -1,3 +1,3 @@
-# vendor-valley
+# VendorValley
 
-Vendors add products that others can buy.
+Where Products Meet Markets
