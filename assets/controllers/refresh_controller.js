@@ -1,4 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
+import $ from 'jquery';
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
@@ -10,9 +11,10 @@ export default class extends Controller {
     };
 
     async reloadContent(e) {
-        const target = this.hasContentTarget ? this.contentTarget : this.element;
+
+        const target = this.hasRefreshContentTarget ? this.refreshContentTarget : this.element;
         const response = await $.ajax({
-            url: this.urlValue
+            url: this.refreshUrlValue
         });
 
         target.innerHTML = response;

@@ -57,6 +57,31 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, User $user, UserRepository $userRepository): Response
+    {
+        $form = $this->createForm(UserType::class, $user, [
+            'action' => $this->generateUrl('app_user_edit', ['id' => $user->getId()])
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $userRepository->save($user, true);
+
+            if ($request->isXmlHttpRequest()) {
+                return new Response(null, 204);
+            }
+
+            return $this->redirectToRoute('app_user_profile', ['id' => $user->getId()]);
+        }
+
+        return $this->render('user/_edit_form.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
+    }
+
+
     #[Route('/profile-{id}', name: 'app_user_profile', methods: ['GET'])]
     public function show(User $user): Response
     {
@@ -69,28 +94,7 @@ class UserController extends AbstractController
             'form' => $form->createView()
         ]);
     }
-
-    #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, UserRepository $userRepository): Response
-    {
-        $form = $this->createForm(UserType::class, $user, [
-            'action' => $this->generateUrl('app_user_edit', ['id' => $user->getId()])
-        ]);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $userRepository->save($user, true);
-
-            return $this->redirectToRoute('app_user_profile', ['id' => $user->getId()]);
-        }
-
-        return $this->render('user/_edit_form.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
-        ]);
-    }
-
-
+    
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, UserRepository $userRepository): Response
     {
