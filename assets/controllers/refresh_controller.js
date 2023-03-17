@@ -10,7 +10,7 @@ export default class extends Controller {
         refreshUrl: String
     };
 
-    async reloadContent(e) {
+    async reloadContent() {
 
         const target = this.hasRefreshContentTarget ? this.refreshContentTarget : this.element;
         const response = await $.ajax({

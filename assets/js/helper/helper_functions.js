@@ -3,7 +3,7 @@ const isSame = (val1, val2) => {
 }
 
 const isValidForm = (form) => {
-    return form.reportValidity() === true;
+    return form && form.reportValidity() === true;
 }
 
 export { isSame, isValidForm };

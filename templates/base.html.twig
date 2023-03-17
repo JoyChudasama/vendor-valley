@@ -24,7 +24,7 @@
 			{{include('components/nav.html.twig')}}
 		{% endblock %}
 
-		<main>
+		<main {{stimulus_controller('global')}} data-action="async-form:submitted-successfully@document->global#addLoadingIcon">
 			{% block body %}{% endblock %}
 		</main>
 
