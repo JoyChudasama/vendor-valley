@@ -5,8 +5,8 @@ export default class extends Controller {
 
     static targets = ['form', 'editButton', 'submitButton', 'cancelButton']
 
-    connect(e) {
-        this.disableAllInputs(e);
+    connect() {
+        this.disableAllInputs();
     }
 
     enableAllInputs(e) {
@@ -25,7 +25,7 @@ export default class extends Controller {
         });
 
         this.editButtonTarget.classList.add('d-none');
-        this.submitButtonTarget.classList.remove('d-none');
+        this.hasSubmitButtonTarget && this.submitButtonTarget.classList.remove('d-none');
         this.cancelButtonTarget.classList.remove('d-none');
     }
 
@@ -44,7 +44,7 @@ export default class extends Controller {
             e.setAttribute('disabled', '');
         });
 
-        this.submitButtonTarget.classList.add('d-none');
+        this.hasSubmitButtonTarget && this.submitButtonTarget.classList.add('d-none');
         this.cancelButtonTarget.classList.add('d-none');
         this.editButtonTarget.classList.remove('d-none');
     }

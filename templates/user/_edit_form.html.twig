@@ -1,4 +1,4 @@
-<div {{stimulus_controller( {'profile':{}, 'async-form':{url:path('app_user_edit',{'id':user.id})}} )}} data-action="async-form:submitted-successfully->profile#disableAllInputs async-form:submitted-successfully->refresh#reloadContent">
+<div {{stimulus_controller( {'profile':{}, 'async-form':{url:path('app_user_edit',{'id':user.id})} } )}} data-action="async-form:submitted-successfully->profile#disableAllInputs async-form:submitted-successfully->refresh#reloadContent">
 	
 	<div class="row">
 		<div class="col-12">
@@ -48,9 +48,9 @@
 		</div>
 	</div>
 
-	<div class="row button-container pt-3">
-		<div class="col-sm-12 col-md-2">
-			<button class="btn btn-md btn-success" type="submit" data-profile-target="submitButton" data-action="async-form#submitForm">Update</button>
+	<div class="row button-container pt-3" {{stimulus_controller('loading-spinner')}}>
+		<div class="col-sm-12 col-md-2" data-loading-spinner-target="submitButtonDiv">
+			<button class="btn btn-md btn-success" type="submit" data-profile-target="submitButton" data-action="async-form#submitForm loading-spinner#add" data-loading-spinner-target="submitButton">Update</button>
 		</div>
 		<div class="col-sm-12 col-md-2">
 			<button class="btn btn-md btn-danger" data-action="profile#disableAllInputs" data-profile-target="cancelButton">Cancel</button>

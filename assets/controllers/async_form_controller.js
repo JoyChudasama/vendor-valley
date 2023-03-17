@@ -30,7 +30,9 @@ export default class extends Controller {
                 contentType: false,
             });
 
-            this.dispatch('submitted-successfully');
+            showToast({ title: 'Info saved successfully.', icon: 'success', timer: 2000, customClass: 'sweetalert' });
+
+            this.dispatch('submitted-successfully', { detail: { submitButton: e.target } });
 
         } catch (e) {
             showToast({ title: 'Something went wrong. Please try again.', icon: 'error', timer: 2000, customClass: 'sweetalert' });
