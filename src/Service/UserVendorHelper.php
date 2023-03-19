@@ -14,7 +14,7 @@ class UserVendorHelper
 
     public function setUpVendor(User $user)
     {
-        if (!$user->getBecomeVendor()) return;
+        if (!$user->getBecomeVendor() || $user->getVendor()) return;
 
         $vendor = new Vendor();
         $vendor->setName("{$user->getFirstName()}'s Business");
