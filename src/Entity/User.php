@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -10,30 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User extends Base implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    const TYPE_SELLER = 'Selling';
-    const TYPE_BUYER = 'Buying';
-
-
-    public static function getUserTypes()
-    {
-        return [
-            self::TYPE_SELLER,
-            self::TYPE_BUYER
-        ];
-    }
-
     const ROLE_ADMIN = 'ROLE_ADMIN';
-    const ROLE_VENDOR = 'ROLE_VENDOR';
-    const ROLE_CLIENT = 'ROLE_CLIENT';
-
-    public static function getAllUserRoles()
-    {
-        return [
-            self::ROLE_ADMIN,
-            self::ROLE_VENDOR,
-            self::ROLE_CLIENT,
-        ];
-    }
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -52,10 +31,10 @@ class User extends Base implements UserInterface, PasswordAuthenticatedUserInter
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255, nullable:true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $firstName = null;
 
-    #[ORM\Column(length: 255, nullable:true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255)]
@@ -71,8 +50,20 @@ class User extends Base implements UserInterface, PasswordAuthenticatedUserInter
 
     public ?string $confirmPassword = null;
 
-    #[ORM\Column(length: 255, nullable:true)]
-    private ?string $type = null;
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class, cascade: ['remove'])]
+    private Collection $orders;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Vendor::class, cascade: ['persist', 'remove'])]
+    private Collection $vendors;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $becomeVendor = null;
+
+    public function __construct()
+    {
+        $this->orders = new ArrayCollection();
+        $this->vendors = new ArrayCollection();
+    }
 
     public function __toString()
     {
@@ -209,14 +200,80 @@ class User extends Base implements UserInterface, PasswordAuthenticatedUserInter
         return $this;
     }
 
-    public function getType(): ?string
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
     {
-        return $this->type;
+        return $this->orders;
     }
 
-    public function setType(string $type): self
+    public function addOrder(Order $order): self
     {
-        $this->type = $type;
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): self
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getUser() === $this) {
+                $order->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Vendor>
+     */
+    public function getVendors(): Collection
+    {
+        return $this->vendors;
+    }
+
+    public function getVendor(): ?Vendor
+    {
+        return $this->getVendors()[0];
+    }
+
+    public function addVendor(Vendor $vendor): self
+    {
+        if (!$this->vendors->contains($vendor)) {
+            $this->vendors->add($vendor);
+            $vendor->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVendor(Vendor $vendor): self
+    {
+        if ($this->vendors->removeElement($vendor)) {
+            // set the owning side to null (unless already changed)
+            if ($vendor->getUser() === $this) {
+                $vendor->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getBecomeVendor(): ?bool
+    {
+        return $this->becomeVendor;
+    }
+
+    public function setBecomeVendor(?bool $becomeVendor): self
+    {
+        $this->becomeVendor = $becomeVendor;
 
         return $this;
     }

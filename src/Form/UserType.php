@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RadioType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -38,12 +39,10 @@ class UserType extends AbstractType
                 'required' => false
             ]);
 
-        if ($user->getType() === null || $user->getType() === User::TYPE_BUYER) {
-            $builder->add('type', ChoiceType::class, [
-                'required' => true,
-                'choices' => array_combine(User::getUserTypes(), User::getUserTypes()),
-                'label' => 'What you will be doing mainly?',
-                'placeholder' => 'Choose an option'
+        if ($user->getId() !== null && ($user->getBecomeVendor() === null || $user->getBecomeVendor() === false)) {
+            $builder->add('becomeVendor', RadioType::class, [
+                'required' => false,
+                'label' => 'Become a Vendor of the Valley',
             ]);
         }
 

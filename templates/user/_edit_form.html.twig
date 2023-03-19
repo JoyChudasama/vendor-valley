@@ -31,14 +31,6 @@
 		</div>
 	</div>
 
-	{% if form.type is defined and not is_granted('ROLE_ADMIN') %}
-		<div class="row">
-			<div class="col-12">
-				{{form_row(form.type)}}
-			</div>
-		</div>
-	{% endif %}
-
 	<div class="row">
 		<div class="col-sm-12 col-md-12 col-lg-6">
 			{{form_row(form.city)}}
@@ -47,6 +39,14 @@
 			{{form_row(form.province)}}
 		</div>
 	</div>
+	
+	{% if form.becomeVendor is defined %}
+		<div class="row">
+			<div class="col-sm-12 col-md-12 col-lg-6 d-flex align-items-center">
+				{{form_row(form.becomeVendor)}}
+			</div>
+		</div>
+	{% endif %}
 
 	<div class="row button-container pt-3" {{stimulus_controller('loading-spinner')}}>
 		<div class="col-sm-12 col-md-2" data-loading-spinner-target="submitButtonDiv">

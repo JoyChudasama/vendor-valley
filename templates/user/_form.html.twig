@@ -40,16 +40,6 @@
 		</div>
 	</div>
 
-	{% if form.type is defined and not is_granted('ROLE_ADMIN') %}
-	
-		<div class="row">
-			<div class="col-sm-12 col-md-12">
-				{{form_row(form.type)}}
-			</div>
-		</div>
-	
-	{% endif %}
-	
 	<div class="row">
 		<div class="col-sm-12 col-md-6">
 			{{form_row(form.city)}}
