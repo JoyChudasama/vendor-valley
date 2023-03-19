@@ -13,6 +13,7 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFilter('shorten', [AppExtensionRuntime::class, 'shorten']),
+            new TwigFilter('currency', [AppExtensionRuntime::class, 'currency']),
         ];
     }
 

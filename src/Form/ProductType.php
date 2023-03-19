@@ -26,15 +26,16 @@ class ProductType extends AbstractType
             ])
             ->add('price', MoneyType::class, [
                 'required' => true,
-                'grouping' => true,
-                'scale' => 2,
-                'currency' => 'USD'
+                'currency' => 'USD',
+                'divisor' => 100,
             ])
             ->add('isAvailable', CheckboxType::class, [
-                'label' => 'Is this product available?'
+                'label' => 'Is this product available?',
+                'required' => false,
             ])
             ->add('isListed', CheckboxType::class, [
-                'label' => 'Would you like to list this product for sell?'
+                'label' => 'Would you like to list this product for sell?',
+                'required' => false,
             ])
             ->add('tempProductImages', DropzoneType::class, [
                 'label' => 'Images',

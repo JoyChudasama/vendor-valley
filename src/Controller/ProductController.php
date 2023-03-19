@@ -30,11 +30,10 @@ class ProductController extends AbstractController
         $product->setVendor($vendor);
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $productRepository->save($product, true);
 
-            return $this->redirectToRoute('app_product_index', ['id'=>$vendor()->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_product_index', ['id'=>$vendor->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('product/new.html.twig', [

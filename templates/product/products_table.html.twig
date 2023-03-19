@@ -14,7 +14,7 @@
 			<tr>
 				<td>{{ product.name }}</td>
 				<td>{{ product.description|shorten(50) }}</td>
-				<td>{{ product.price }}</td>
+				<td>{{ product.price|currency }}</td>
 				<td>{{ product.isAvailable ? 'Yes' : 'No' }}</td>
 				<td>{{ product.isListed ? 'Yes' : 'No' }}</td>
 				<td>

@@ -3,10 +3,12 @@
 {% block title %}Edit Product{% endblock %}
 
 {% block body %}
-    <h1>Edit Product</h1>
+   	<div class="container my-5 p-3">
 
-    {{ include('product/_form.html.twig', {'button_label': 'Update'}) }}
+        <h1 class="text-center fs-1 fw-bold">Edit Product</h1>
+		<hr/>
 
+		{{ include('product/_form.html.twig') }}
 
-    {{ include('product/_delete_form.html.twig') }}
+	</div>
 {% endblock %}
