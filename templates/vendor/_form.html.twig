@@ -1,0 +1,49 @@
+<div {{stimulus_controller( {'profile':{} , 'async-form' :{url:path('app_vendor_edit',{'id':vendor.id})} } )}} data-action="async-form:submitted-successfully->profile#disableAllInputs async-form:submitted-successfully->refresh#reloadContent">
+
+	<div class="row">
+		<div class="col-12">
+			{% for message in app.flashes('error')  %}
+				{{include('components/flash.html.twig',{flashType:'danger',flashMessage:message})}}
+			{% endfor %}
+		</div>
+	</div>
+
+	{{ form_start(form,{'attr':{'data-profile-target':'form','data-async-form-target':'form'}}) }}
+
+	<div class="row">
+		<div class="col-sm-12 col-md-12">
+			{{form_row(form.name)}}
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-12 col-md-12 col-lg-12">
+			{{form_row(form.description)}}
+		</div>
+	</div>
+
+	<div class="row button-container pt-3" {{stimulus_controller('loading-spinner')}}>
+		<div class="col-sm-12 col-md-2" data-loading-spinner-target="submitButtonDiv">
+			<button class="btn btn-md btn-success" type="submit" data-profile-target="submitButton" data-action="async-form#submitForm loading-spinner#add" data-loading-spinner-target="submitButton">Update</button>
+		</div>
+		<div class="col-sm-12 col-md-2">
+			<button class="btn btn-md btn-danger" data-action="profile#disableAllInputs" data-profile-target="cancelButton">Cancel</button>
+		</div>
+	</div>
+
+	{{ form_widget(form._token) }}
+
+	{{ form_end(form,{'render_rest':false}) }}
+
+	<div class="row pt-3 button-container">
+		
+        <div class="col-sm-12 col-md-2">
+			<button class="btn btn-md btn-primary" data-action="profile#enableAllInputs" data-profile-target="editButton">Edit</button>
+		</div>
+
+		<div class="col-sm-12 col-md-2 mt-3" data-profile-target='deleteButton'>
+			{{include('vendor/_delete_form.html.twig')}}
+		</div>
+	</div>
+
+</div>

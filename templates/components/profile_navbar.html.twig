@@ -1,4 +1,4 @@
-<div class="profile-sidebar bg-primary text-white rounded mb-5">
+<div class="profile-navbar bg-primary text-white rounded mb-5">
 
 	<ul class="d-flex p-3">
         <li class="p-2">
@@ -11,9 +11,10 @@
 			</li>
 		{% endif %}
 
-		{% if user.getVendor %}
+		{% set vendor = user.getVendor %}
+		{% if vendor %}
 			<li class="p-2">
-				<a href="#" class="text-center">{{user.getVendor}}</a>
+				<a href="{{path('app_vendor_profile',{'id':vendor.id})}}">{{vendor}}</a>
 			</li>
 		{% endif %}
 

@@ -1,4 +1,4 @@
-.profile-sidebar {
+.vendor-navbar {
     ul {
         li>a {
             color: white !important;
@@ -17,14 +17,14 @@
 }
 
 @media only screen and (max-width: 768px) {
-    .profile-sidebar {
-        
+    .vendor-navbar {
+
         ul {
             flex-direction: column !important;
             justify-content: space-around;
             align-items: start;
 
-            li{
+            li {
                 width: 100%;
             }
         }

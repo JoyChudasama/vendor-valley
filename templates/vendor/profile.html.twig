@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{parent()}}
+	|
+	{{vendor.name}}
+	Dashboard
+{% endblock %}
+
+
+{% block body %}
+	<div class="container my-5 p-3" {{stimulus_controller('refresh',{refreshUrl:path('app_vendor_edit',{'id':vendor.id} )})}}>
+
+		<div data-refresh-target="refreshContent">
+			{{include('vendor/profile_content.html.twig')}}
+		</div>
+
+	</div>
+
+{% endblock %}
