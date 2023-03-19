@@ -1,27 +1,28 @@
-<div class="profile-sidebar h-100 bg-primary text-white rounded">
-	<ul class="p-5 d-flex flex-column">
-        <li class="py-2 my-2">
+<div class="profile-sidebar bg-primary text-white rounded mb-5">
+
+	<ul class="d-flex p-3">
+        <li class="p-2">
 			<a href="{{path('app_user_profile',{'id':user.id})}}">Profile</a>
 		</li>
 
         {% if is_granted('ROLE_ADMIN') %}
-			<li class="py-2 my-2">
+			<li class="p-2">
 				<a  href="#">Admin</a>
 			</li>
 		{% endif %}
 
 		{% if user.getVendor %}
-			<li class="py-2 my-2">
+			<li class="p-2">
 				<a href="#" class="text-center">{{user.getVendor}}</a>
 			</li>
 		{% endif %}
 
-		<li class="py-2 my-2">
+		<li class="p-2">
 			<a href="#">Orders</a>
 		</li>
-		<li class="py-2 my-2">
+		
+		<li class="p-2">
 			<a href="#">Payment</a>
 		</li>
-
 	</ul>
 </div>

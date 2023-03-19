@@ -12,15 +12,17 @@
 
 {% block body %}
 	<div class="container my-5 p-3">
+		
 		<div class="row">
-
-			<div class="col-sm-12 col-md-12 col-lg-3">
+			<div class="col-sm-12 col-md-12 col-lg-12">
 				{{include('components/sidebar.html.twig')}}
-            </div>
+			</div>
+		</div>
 
-			<div class="col-sm-12 col-md-12 col-lg-9" {{stimulus_controller('refresh',{refreshUrl:path('app_user_edit',{'id':user.id})})}}>
+		<div class="row">
+			<div class="col-sm-12 col-md-12 col-lg-12" {{stimulus_controller('refresh',{refreshUrl:path('app_user_edit',{'id':user.id} )})}}>
 				<div data-refresh-target="refreshContent">
-				{{include('user/_edit_form.html.twig',{form:form})}}
+					{{include('user/_edit_form.html.twig',{form:form})}}
 				</div>
 			</div>
 		</div>

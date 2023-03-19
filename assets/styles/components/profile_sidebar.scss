@@ -16,14 +16,17 @@
     }
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (max-width: 768px) {
     .profile-sidebar {
-        height: auto !important;
-
+        
         ul {
-            flex-direction: row !important;
+            flex-direction: column !important;
             justify-content: space-around;
-            align-items: center;
+            align-items: start;
+
+            li{
+                width: 100%;
+            }
         }
     }
 }
