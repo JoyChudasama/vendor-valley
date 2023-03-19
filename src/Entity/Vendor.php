@@ -15,7 +15,7 @@ class Vendor
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-    
+
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
@@ -23,7 +23,7 @@ class Vendor
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'vendors')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, unique:true)]
     private ?User $user = null;
 
     #[ORM\OneToMany(mappedBy: 'vendor', targetEntity: Product::class)]
@@ -36,6 +36,11 @@ class Vendor
     {
         $this->products = new ArrayCollection();
         $this->orders = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 
     public function getId(): ?int

@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Service\UserRegistrationHelper;
+use App\Service\UserVendorHelper;
 use DateTime;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -58,7 +59,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, UserRepository $userRepository): Response
+    public function edit(Request $request, User $user, UserRepository $userRepository, UserVendorHelper $userVendorHelper): Response
     {
         $form = $this->createForm(UserType::class, $user, [
             'action' => $this->generateUrl('app_user_edit', ['id' => $user->getId()])
@@ -66,8 +67,11 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $userRepository->save($user, true);
+            
+            $userVendorHelper->setUpVendor($user);
 
+            $userRepository->save($user, true);
+            
             if ($request->isXmlHttpRequest()) {
                 return new Response(null, 204);
             }

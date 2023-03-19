@@ -10,9 +10,9 @@
 			</li>
 		{% endif %}
 
-		{% if is_granted('ROLE_VENDOR') %}
+		{% if user.getVendor %}
 			<li class="py-2 my-2">
-				<a href="#">Dashboard</a>
+				<a href="#" class="text-center">{{user.getVendor}}</a>
 			</li>
 		{% endif %}
 

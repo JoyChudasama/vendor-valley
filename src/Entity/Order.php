@@ -13,7 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class Order
 {
 
+    const ORDER_STATUS_PENDING = 'Pending';
+    const ORDER_STATUS_PROCESSING = 'Processing';
+    const ORDER_STATUS_SHIPPED = 'Shipped';
+    const ORDER_STATUS_DELIVERED = 'Delivered';
+    const ORDER_STATUS_CANCELLED = 'Cancelled';
+    const ORDER_STATUS_REFUNDED = 'Refunded';
+    const ORDER_STATUS_ON_HOLD = 'On Hold';
     
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -23,7 +31,7 @@ class Order
     private Collection $products;
 
     #[ORM\Column(length: 255)]
-    private ?string $status = null;
+    private ?string $status = self::ORDER_STATUS_PENDING;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2)]
     private ?string $totalAmount = null;

@@ -54,10 +54,10 @@ class User extends Base implements UserInterface, PasswordAuthenticatedUserInter
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255, nullable:true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $firstName = null;
 
-    #[ORM\Column(length: 255, nullable:true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255)]
@@ -73,14 +73,14 @@ class User extends Base implements UserInterface, PasswordAuthenticatedUserInter
 
     public ?string $confirmPassword = null;
 
-    #[ORM\Column(length: 255, nullable:true)]
-    private ?string $type = null;
-
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class, cascade: ['remove'])]
     private Collection $orders;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Vendor::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Vendor::class, cascade: ['persist', 'remove'])]
     private Collection $vendors;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $becomeVendor = null;
 
     public function __construct()
     {
@@ -223,17 +223,6 @@ class User extends Base implements UserInterface, PasswordAuthenticatedUserInter
         return $this;
     }
 
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): self
-    {
-        $this->type = $type;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Order>
@@ -273,6 +262,11 @@ class User extends Base implements UserInterface, PasswordAuthenticatedUserInter
         return $this->vendors;
     }
 
+    public function getVendor(): ?Vendor
+    {
+        return $this->getVendors()[0];
+    }
+
     public function addVendor(Vendor $vendor): self
     {
         if (!$this->vendors->contains($vendor)) {
@@ -291,6 +285,18 @@ class User extends Base implements UserInterface, PasswordAuthenticatedUserInter
                 $vendor->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBecomeVendor(): ?bool
+    {
+        return $this->becomeVendor;
+    }
+
+    public function setBecomeVendor(?bool $becomeVendor): self
+    {
+        $this->becomeVendor = $becomeVendor;
 
         return $this;
     }
