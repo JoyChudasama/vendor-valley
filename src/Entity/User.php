@@ -12,30 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User extends Base implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    const TYPE_SELLER = 'Selling';
-    const TYPE_BUYER = 'Buying';
-
-
-    public static function getUserTypes()
-    {
-        return [
-            self::TYPE_SELLER,
-            self::TYPE_BUYER
-        ];
-    }
-
     const ROLE_ADMIN = 'ROLE_ADMIN';
-    const ROLE_VENDOR = 'ROLE_VENDOR';
-    const ROLE_CLIENT = 'ROLE_CLIENT';
-
-    public static function getAllUserRoles()
-    {
-        return [
-            self::ROLE_ADMIN,
-            self::ROLE_VENDOR,
-            self::ROLE_CLIENT,
-        ];
-    }
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
