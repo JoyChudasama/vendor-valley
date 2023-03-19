@@ -13,14 +13,9 @@ export default class extends Controller {
 
         e.preventDefault();
 
-        const dropdowns = $(this.formTarget).find('select');
-        const textFields = $('input[type=text], textarea');
+        const inputs = $('textarea, input, select');
 
-        dropdowns.each((i, e) => {
-            e.removeAttribute('disabled');
-        });
-       
-        textFields.each((i, e) => {
+        inputs.each((i, e) => {
             e.removeAttribute('disabled');
         });
 
@@ -34,15 +29,10 @@ export default class extends Controller {
 
         e && e.preventDefault();
 
-        const dropdowns = $(this.formTarget).find('select');
-        const textFields = $('input[type=text], textarea');
+        const inputs = $('textarea, input, select');
 
-        dropdowns.each((i, e) => {
+        inputs.each((i, e) => {
             e.setAttribute('disabled', '');
-        });
- 
-        textFields.each((i, e) => {
-            e.setAttribute('disabled','');
         });
 
         this.hasSubmitButtonTarget && this.submitButtonTarget.classList.add('d-none');
