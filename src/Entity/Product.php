@@ -34,6 +34,8 @@ class Product
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductImage::class)]
     private Collection $productImages;
 
+    public string $tempProductImages;
+
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Order $orderr = null;
 

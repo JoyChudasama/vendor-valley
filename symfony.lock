@@ -260,6 +260,9 @@
             "./config/packages/uid.yaml"
         ]
     },
+    "symfony/ux-dropzone": {
+        "version": "v2.7.1"
+    },
     "symfony/validator": {
         "version": "6.2",
         "recipe": {

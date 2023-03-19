@@ -1,12 +1,12 @@
-.vendor-navbar {
+.user-navbar {
     ul {
         li>a {
-            color: white !important;
+            color: $white !important;
             padding: 1rem;
         }
 
         li:hover {
-            background-color: white;
+            background-color: $white;
             border-radius: 1rem;
 
             >a {
@@ -17,14 +17,14 @@
 }
 
 @media only screen and (max-width: 768px) {
-    .vendor-navbar {
-
+    .user-navbar {
+        
         ul {
             flex-direction: column !important;
             justify-content: space-around;
             align-items: start;
 
-            li {
+            li{
                 width: 100%;
             }
         }

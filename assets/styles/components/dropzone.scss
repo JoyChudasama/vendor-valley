@@ -1,0 +1,60 @@
+.dropzone-wrapper {
+
+    >div {
+        height: 100%;
+
+        .dropzone-container {
+            position: relative;
+            height: 100%;
+            border: 2px dashed $secondary !important;
+
+            input {
+                position: absolute;
+                height: 100% !important;
+                width: 100% !important;
+                opacity: 0;
+                cursor: pointer;
+            }
+
+            .dropzone-placeholder {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+    }
+}
+
+
+@media only screen and (max-width: 768px) {
+    .dropzone-wrapper {
+        margin-bottom: 3rem;
+
+        >div {
+            height: auto;
+
+            .dropzone-container {
+                position: relative;
+                height: auto;
+                border: 2px dashed $secondary !important;
+
+                input {
+                    position: relative;
+                    height: auto !important;
+                    width: auto !important;
+                    opacity: 0;
+                    cursor: pointer;
+                }
+
+                .dropzone-placeholder {
+                    position: relative;
+                    text-align: center;
+                }
+            }
+
+        }
+    }
+
+}
