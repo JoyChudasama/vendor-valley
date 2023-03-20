@@ -1,14 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Product{% endblock %}
+{% block title %}Edit Product
+{% endblock %}
 
 {% block body %}
-   	<div class="container my-5 p-3">
+	<div class="container my-5 p-3">
 
-        <h1 class="text-center fs-1 fw-bold">Edit Product</h1>
+		<div class="row">
+			<div class="col-12">
+				{% for message in app.flashes('error')  %}
+					{{include('components/flash.html.twig',{flashType:'danger',flashMessage:message})}}
+				{% endfor %}
+			</div>
+		</div>
+
+		<h1 class="text-center fs-1 fw-bold">Edit Product</h1>
 		<hr/>
 
-		{{ include('product/_form.html.twig') }}
+		{{ include('product/_edit_form.html.twig') }}
 
 	</div>
 {% endblock %}

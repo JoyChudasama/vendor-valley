@@ -40,6 +40,8 @@ class ProductType extends AbstractType
             ->add('tempProductImages', DropzoneType::class, [
                 'label' => 'Images',
                 'required' => false,
+                'mapped' => false,
+                'multiple'=>true,
             ]);
     }
 

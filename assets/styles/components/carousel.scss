@@ -1,0 +1,13 @@
+.carousel {
+    .carousel-inner {
+        .carousel-item {
+            overflow: hidden ;
+
+            img {
+                height: 500px !important;
+                width: 100% !important;
+                object-fit: scale-down !important;
+            }
+        }
+    }
+}

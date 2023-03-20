@@ -3,8 +3,16 @@
 
 <div class="row my-5">
 
-	<div class="col-sm-12 col-md-12 col-lg-6 dropzone-wrapper">		
-		{{form_row(form.tempProductImages,{'attr':{'accept':'image/*'}})}}
+	<div class="col-sm-12 col-md-12 col-lg-6">
+		<div class="row">
+			<div class="col-sm-12 col-md-12 col-lg-12">
+				{{include('components/carousel.html.twig',{images:product.productImages})}}
+			</div>
+
+			<div class="col-sm-12 col-md-12 col-lg-12 my-5 dropzone-wrapper">
+				{{form_row(form.tempProductImages,{'attr':{'accept':'image/*'}})}}
+			</div>
+		</div>
 	</div>
 
 	<div class="col-sm-12 col-md-12 col-lg-6">

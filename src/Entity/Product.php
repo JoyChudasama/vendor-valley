@@ -31,10 +31,10 @@ class Product
     #[ORM\Column(nullable: true)]
     private ?bool $isListed = false;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductImage::class)]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductImage::class, cascade:['persist','remove'])]
     private Collection $productImages;
 
-    public string $tempProductImages;
+    public $tempProductImages;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Order $orderr = null;
