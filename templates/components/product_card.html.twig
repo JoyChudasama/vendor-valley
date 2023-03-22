@@ -1,0 +1,43 @@
+<div class="row product-card card p-2 bg-light">
+    
+    {% set imagePath = product.productImages|length > 0 ? '/uploads/product_images/' ~ product.productImages|first.encodedImageName : image_placeholder_path %}
+    
+    <div class="col-12">
+        <img src={{asset(imagePath)}} class="card-img-top" alt="...">
+    </div>
+
+    <div class="col-12">
+        <div class="card-body row">
+            <div class="col-12 my-2">
+                <h5 class="card-title fw-bold">{{product.name}}</h5>
+            </div>
+
+            <div class="col-12 my-2">
+                <p class="card-text">{{product.description|shorten(150)}}</p>
+            </div>
+
+            <div class="col-12 categories d-flex flex-wrap gap-1">
+                <span class="p-2 rounded-pill bg-dark text-white">Category 1</span>
+                <span class="p-2 rounded-pill bg-dark text-white">Category 2</span>
+            </div>
+            
+            <div class="col-12 button-container">
+
+                <a href="#buyNow" class="btn btn-md btn-primary my-2 buy-now-button">
+                    <span class="mr-2">Buy Now</span>
+
+                    <svg class="buyNowIcon">
+                        <use xlink: href="/icons.svg#buyNowIcon"></use>
+                    </svg>
+                </a>
+
+                <a href="#addToCart" class="btn btn-md btn-primary add-to-cart-button">
+                    <span class="mr-2">Add to cart</span>
+                    <svg class="cartIcon">
+                        <use xlink: href="/icons.svg#cartIcon"></use>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
