@@ -53,7 +53,7 @@ final class ProductFactory extends ModelFactory
             'vendor' => $this->entityProvider->getRandomVendor(),
             'isListed' => self::faker()->boolean(80),
             'isAvailable' => self::faker()->boolean(100),
-            'price' => self::faker()->randomFloat(2, 1, 1000),
+            'price' => self::faker()->randomFloat(2, 10, 1000),
         ];
     }
 
