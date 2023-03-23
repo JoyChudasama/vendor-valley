@@ -43,9 +43,16 @@ class Product
     #[ORM\JoinColumn(nullable: false)]
     private ?Vendor $vendor = null;
 
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    private ?Cart $cart = null;
+
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: CartItem::class)]
+    private Collection $cartItems;
+
     public function __construct()
     {
         $this->productImages = new ArrayCollection();
+        $this->cartItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -163,6 +170,48 @@ class Product
     public function setVendor(?Vendor $vendor): self
     {
         $this->vendor = $vendor;
+
+        return $this;
+    }
+
+    public function getCart(): ?Cart
+    {
+        return $this->cart;
+    }
+
+    public function setCart(?Cart $cart): self
+    {
+        $this->cart = $cart;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CartItem>
+     */
+    public function getCartItems(): Collection
+    {
+        return $this->cartItems;
+    }
+
+    public function addCartItem(CartItem $cartItem): self
+    {
+        if (!$this->cartItems->contains($cartItem)) {
+            $this->cartItems->add($cartItem);
+            $cartItem->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCartItem(CartItem $cartItem): self
+    {
+        if ($this->cartItems->removeElement($cartItem)) {
+            // set the owning side to null (unless already changed)
+            if ($cartItem->getProduct() === $this) {
+                $cartItem->setProduct(null);
+            }
+        }
 
         return $this;
     }
