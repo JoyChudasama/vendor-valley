@@ -1,0 +1,54 @@
+{{ form_start(form) }}
+{{ form_widget(form._token) }}
+
+<div class="row my-5">
+
+	<div class="col-sm-12 col-md-12 col-lg-6">
+		<div class="row">
+			<div class="col-sm-12 col-md-12 col-lg-12">
+				{{include('components/carousel.html.twig',{images:product.productImages})}}
+			</div>
+
+			<div class="col-sm-12 col-md-12 col-lg-12 my-5 dropzone-wrapper">
+				{{form_row(form.tempProductImages,{'attr':{'accept':'image/*'}})}}
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-12 col-md-12 col-lg-6">
+
+		<div class="row mb-3">
+			<div class="col-sm-12 col-md-12 col-lg-12">
+				{{form_row(form.name)}}
+			</div>
+		</div>
+		<div class="row mb-3">
+			<div class="col-sm-12 col-md-12 col-lg-12">
+				{{form_row(form.description)}}
+			</div>
+		</div>
+		<div class="row align-items-center mb-3">
+			<div class="col-sm-12 col-md-5 pt-3">
+				{{form_row(form.isAvailable)}}
+			</div>
+			<div class="col-sm-12 col-md-7 pt-3">
+				{{form_row(form.isListed)}}
+			</div>
+		</div>
+		<div class="row mb-3">
+			<div class="col-sm-12 col-md-4 col-lg-4">
+				{{form_row(form.price)}}
+			</div>
+		</div>
+
+		<div class="button-container row py-5">
+			<div class="col-sm-12 col-md-2">
+				<button class="btn btn-success" type="submit">Save</button>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+
+{{ form_end(form,{'render_rest':false}) }}

@@ -1,0 +1,38 @@
+{% set activeImage = images|first %}
+{% set defaultInterval = 2500 %}
+
+<div id="carousel" class="carousel carousel-dark slide card rounded" data-bs-ride="carousel">
+
+	{% if activeImage %}
+
+		<div class="carousel-inner">
+
+			<div class="carousel-item active" data-bs-interval={{defaultInterval}}>
+				<img src={{asset('/uploads/product_images/'~ activeImage.encodedImageName)}} class="mx-auto d-block" alt="Product Image">
+			</div>
+
+			{% for image in images %}
+				{% if image.encodedImageName != activeImage.encodedImageName %}
+					<div class="carousel-item" data-bs-interval={{defaultInterval}}>
+						<img src={{asset('/uploads/product_images/'~ image.encodedImageName)}} class="mx-auto d-block" alt="Product Image">
+					</div>
+				{% endif %}
+			{% endfor %}
+		</div>
+
+		<div class="carousel-indicators">
+
+			<button type="button" data-bs-target="#carousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+
+			{% for image in images %}
+				{% if loop.index > 1 %}
+					<button type="button" data-bs-target="#carousel" data-bs-slide-to="{{loop.index0}}" aria-label="Slide {{loop.index0}}"></button>
+				{% endif %}
+			{% endfor %}
+		</div>
+	{% else %}
+		<img src={{asset(image_placeholder_path)}} class="mx-auto d-block" alt="Image Placeholder">
+	{% endif %}
+
+
+</div>

@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{parent()}}
+	|
+	{{vendor.name}}
+	Dashboard
+{% endblock %}
+
+{% block body %}
+
+	<div class="container my-5 p-3">
+
+		{{ include('vendor/_form.html.twig') }}
+
+	</div>
+{% endblock %}

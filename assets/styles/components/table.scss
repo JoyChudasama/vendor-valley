@@ -1,0 +1,100 @@
+table {
+    thead {
+        tr {
+            th {
+                text-align: center;
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            td {
+                text-align: center;
+
+                .dropdown {
+
+                    i {
+                        cursor: pointer;
+                    }
+
+                    ul {
+                        li {
+
+                            a {
+                                &.delete {
+                                    form {
+                                        button {
+                                            border: none;
+                                            background: none;
+                                        }
+                                    }
+                                }
+                            }
+
+                            &:hover {
+
+                                a,
+                                button {
+                                    background-color: transparent !important;
+                                    color: $white !important;
+                                }
+                            }
+
+
+                            a,
+                            button {
+
+                                &:hover {
+
+                                    &.edit {
+                                        background-color: $primary !important;
+                                    }
+
+                                    &.delete {
+                                        background-color: $danger !important;
+
+                                        form {
+                                            button {
+                                                border: none;
+                                                background: none;
+                                            }
+                                        }
+
+                                    }
+
+                                }
+                            }
+
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@media only screen and (max-width: 768px) {
+    table {
+
+        display: flex;
+
+        thead,
+        tbody {
+            tr {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
+        thead {
+            min-width: 40%;
+        }
+
+        tbody {
+            min-width: 60%;
+        }
+    }
+}

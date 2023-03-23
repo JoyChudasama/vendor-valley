@@ -3,7 +3,8 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>
-			{% block title %}Vendor Valley
+			{% block title %}
+				Vendor Valley
 			{% endblock %}
 		</title>
 
@@ -24,7 +25,24 @@
 			{{include('components/nav.html.twig')}}
 		{% endblock %}
 
-		<main {{stimulus_controller('global')}} data-action="async-form:submitted-successfully@document->global#addLoadingIcon">
+		<main>
+		
+			<div class="container flash-container">
+				<div class="row pt-2">
+					<div class="col-12">
+						{% for message in app.flashes('error')  %}
+							{{include('components/toast.html.twig',{flashType:'danger',flashMessage:message})}}
+						{% endfor %}
+					</div>
+
+					<div class="col-12">
+						{% for message in app.flashes('success')  %}
+							{{include('components/flash.html.twig',{flashType:'success',flashMessage:message})}}
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+
 			{% block body %}{% endblock %}
 		</main>
 
