@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CartRepository::class)]
-class Cart
+class Cart extends Base
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -73,7 +73,7 @@ class Cart
             // set the owning side to null (unless already changed)
             if ($cartItem->getCart() === $this) {
                 $cartItem->setCart(null);
-                
+
                 $this->totalAmount -= $cartItem->getProduct()->getPrice() * $cartItem->getQuantity();
             }
         }

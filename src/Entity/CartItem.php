@@ -6,7 +6,7 @@ use App\Repository\CartItemRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CartItemRepository::class)]
-class CartItem
+class CartItem extends Base
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

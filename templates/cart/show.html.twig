@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cart{% endblock %}
+
+{% block body %}
+    <h1>Cart</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ cart.id }}</td>
+            </tr>
+            <tr>
+                <th>TotalAmount</th>
+                <td>{{ cart.totalAmount }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ cart.createdAt ? cart.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ cart.updatedAt ? cart.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>CreatedBy</th>
+                <td>{{ cart.createdBy }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedBy</th>
+                <td>{{ cart.updatedBy }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_cart_index') }}">back to list</a>
+
+    <a href="{{ path('app_cart_edit', {'id': cart.id}) }}">edit</a>
+
+    {{ include('cart/_delete_form.html.twig') }}
+{% endblock %}
