@@ -15,7 +15,7 @@ export default class extends Controller {
 
             showFlash(res.type, res.message);
 
-            this.dispatch('event_updateCartItemsCount', { numberOfItems: params.cart.numberOfItems });
+            this.dispatch('event_updateCartItemsCount', { detail:{numberOfItems: res.cart.numberOfItems} });
 
         } catch (e) {
             const res = e.responseJSON;

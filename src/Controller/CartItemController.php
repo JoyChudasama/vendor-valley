@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CartItemController extends AbstractController
 {
     #[Route('/{id}/new', name: 'app_cart_item_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, CartItemHelper $cartItemHelper, Product $product): Response
+    public function new(Request $request, CartItemHelper $cartItemHelper, Product $product): JsonResponse
     {
 
         try {
@@ -41,4 +41,5 @@ class CartItemController extends AbstractController
             ], 400);
         }
     }
+
 }

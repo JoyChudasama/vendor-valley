@@ -19,7 +19,10 @@
 				{% if app.user %}
 
 					<li class="nav-item">
-						<a class="nav-link" href="#">Cart</a>
+						<a class="nav-link cart" href="{{path('app_cart_show')}}">
+							<span>Cart</span>
+							<span data-global-target="numberOfCartItems"></span>
+						</a>
 					</li>
 
 					<li class="nav-item dropdown">

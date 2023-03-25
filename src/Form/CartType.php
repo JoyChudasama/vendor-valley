@@ -3,7 +3,10 @@
 namespace App\Form;
 
 use App\Entity\Cart;
+use Doctrine\DBAL\Types\DecimalType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -12,13 +15,11 @@ class CartType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('totalAmount')
-            ->add('createdAt')
-            ->add('updatedAt')
-            ->add('createdBy')
-            ->add('updatedBy')
-            ->add('customer')
-        ;
+            ->add('cartItems', CollectionType::class)
+            ->add('totalAmount', MoneyType::class, [
+                'currency' => 'USD',
+                'divisor' => 100,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

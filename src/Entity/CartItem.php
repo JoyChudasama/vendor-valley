@@ -63,4 +63,9 @@ class CartItem extends Base
 
         return $this;
     }
+
+    public function getTotalAmount(): float
+    {
+        return $this->quantity * $this->product->getPrice();
+    }
 }
