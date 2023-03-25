@@ -18,7 +18,7 @@ class Cart extends Base
     #[ORM\ManyToOne(inversedBy: 'carts')]
     private ?User $customer = null;
 
-    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: CartItem::class)]
+    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: CartItem::class, cascade:['persist','remove'])]
     private Collection $cartItems;
 
     #[ORM\Column]

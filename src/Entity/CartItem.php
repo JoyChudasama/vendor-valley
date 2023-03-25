@@ -21,7 +21,7 @@ class CartItem extends Base
     private ?Cart $cart = null;
 
     #[ORM\Column]
-    private ?int $quantity = null;
+    private ?int $quantity = 1;
 
     public function getId(): ?int
     {

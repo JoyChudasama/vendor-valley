@@ -19,19 +19,27 @@
 		{# Font Awesome #}
 		<script src="https://kit.fontawesome.com/bd7ff58664.js" crossorigin="anonymous"></script>
 	</head>
-	<body>
+	<body {{stimulus_controller('global')}}>
 
 		{% block nav %}
 			{{include('components/nav.html.twig')}}
 		{% endblock %}
 
-		<main>
+		<main {{stimulus_controller('event-dispatcher')}}>
 		
-			<div class="container flash-container">
-				<div class="row pt-2">
+			<div class="container flash-container" id="flash-container">
+				<div class="row pt-2" data-action="event-dispatcher:event_hideFlash@document->global#hideFlash">
+					
+					<div class="col-12 d-none" id="js-flash">
+						<div class="alert alert-dismissible fade show" role="alert">
+							<span id="flash-message"></span>
+							<button type="button" class="btn-close" data-action="event-dispatcher#dispatchHideFlash"></button>
+						</div>
+					</div>
+					
 					<div class="col-12">
 						{% for message in app.flashes('error')  %}
-							{{include('components/toast.html.twig',{flashType:'danger',flashMessage:message})}}
+							{{include('components/flash.html.twig',{flashType:'danger',flashMessage:message})}}
 						{% endfor %}
 					</div>
 
