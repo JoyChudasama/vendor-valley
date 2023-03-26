@@ -3,28 +3,33 @@
 namespace App\Service;
 
 use App\Entity\Cart;
-use App\Entity\CartItem;
-use App\Entity\Product;
-use App\Repository\ProductRepository;
-use Exception;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Session\Session;
 
-class CartHelper
+class CartHelper extends AbstractController
 {
-    public function __construct(private ProductRepository $productRepository, private Security $security)
+    public function __construct(private Security $security)
     {
     }
 
-    public function createNew(Session $session):Cart
+    public function getCart(Session $session): Cart
     {
-        $cartItems = $session->get('cart_items', []);
+        $cart = $session->get('cart');
+        if ($cart) return $cart;
+
         $cart = new Cart();
-        
-        foreach ($cartItems as $cartItem) {
-            $cart->addCartItem($cartItem);    
-        }
+        $cart->setCustomer($this->security->getUser());
+        $cart->setTotalAmount(0);
+
+        $session->set('cart', $cart);
 
         return $cart;
+    }
+
+    public function clearCart(Session $session)
+    {
+        $session->remove('cart');
+        $session->remove('cart_items');
     }
 }

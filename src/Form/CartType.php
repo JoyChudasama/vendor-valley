@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Cart;
-use Doctrine\DBAL\Types\DecimalType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
@@ -15,7 +15,9 @@ class CartType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('cartItems', CollectionType::class)
+            ->add('cartItems', CollectionType::class, [
+                'entry_type' => CartItemType::class,
+            ])
             ->add('totalAmount', MoneyType::class, [
                 'currency' => 'USD',
                 'divisor' => 100,

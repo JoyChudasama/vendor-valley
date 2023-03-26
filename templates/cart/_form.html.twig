@@ -1,4 +1,19 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+{% if not is_cart_empty %}
+
+	{{form_start(form)}}
+
+	{% for cartItem in form.cartItems %}
+		{{form_row(cartItem)}}
+
+	{% endfor %}
+	
+	{{form_row(form.totalAmount)}}
+
+	<button class="btn">{{ button_label|default('Save') }}</button>
+
+	{{form_widget(form._token)}}
+	{{form_end(form,{'render_rest':false})}}
+{% else %}
+	Cart is Empty
+
+{% endif %}

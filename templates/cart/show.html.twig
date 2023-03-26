@@ -1,17 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Cart
+{% block title %}
+	{{parent()}}
+	| Cart
 {% endblock %}
 
 {% block body %}
 
-	{{form_start(form)}}
-	{% for cartItem in form.cartItems %}
-		{{form_row(cartItem)}}
-	{% endfor %}
+	<div class="container my-5 p-3">
 
-		{{form_row(form.totalAmount)}}
-	{{form_widget(form._token)}}
-	{{form_end(form)}}
+		<h1 class="text-center fs-1 fw-bold">Cart</h1>
+		<hr/>
+
+		{{include('cart/_form.html.twig')}}
+
+	</div>
 
 {% endblock %}

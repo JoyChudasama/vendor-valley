@@ -21,7 +21,7 @@ class CartItemController extends AbstractController
         try {
             $session = $request->getSession();
 
-            $cartItemHelper->createNew($product, $session);
+            $cartItemHelper->addToCart($product, $session);
 
             $cartItems = $session->get('cart_items', []);
 
@@ -34,7 +34,6 @@ class CartItemController extends AbstractController
 
             ], 200);
         } catch (Exception $e) {
-
             return new JsonResponse([
                 'type' => 'warning',
                 'message' => $e->getMessage()

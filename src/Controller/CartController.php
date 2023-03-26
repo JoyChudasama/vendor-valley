@@ -25,73 +25,30 @@ class CartController extends AbstractController
         return new JsonResponse(['numberOfItems' => count($cartItems)], 200);
     }
 
-    #[Route('/', name: 'app_cart_index', methods: ['GET'])]
-    public function index(CartRepository $cartRepository): Response
-    {
-        return $this->render('cart/index.html.twig', [
-            'carts' => $cartRepository->findAll(),
-        ]);
-    }
-
-    #[Route('/new', name: 'app_cart_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, CartRepository $cartRepository): Response
-    {
-        $cart = new Cart();
-        $form = $this->createForm(CartType::class, $cart);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $cartRepository->save($cart, true);
-
-            return $this->redirectToRoute('app_cart_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('cart/new.html.twig', [
-            'cart' => $cart,
-            'form' => $form,
-        ]);
-    }
-
     #[Route('/show', name: 'app_cart_show', methods: ['GET'])]
     public function show(Request $request, CartHelper $cartHelper): Response
     {
         $session = $request->getSession();
-        $cart = $cartHelper->createNew($session);
-        $form = $this->createForm(CartType::class, $cart);
-        // $form->handleRequest($request);
 
+        $cart = $cartHelper->getCart($session);
+        $isCartEmpty = count($cart->getCartItems()->getValues()) === 0;
+       
+        $form = $this->createForm(CartType::class, $cart);
 
         return $this->render('cart/show.html.twig', [
             'cart' => $cart,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'is_cart_empty' => $isCartEmpty
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_cart_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Cart $cart, CartRepository $cartRepository): Response
+    #[Route('/clear', name: 'app_cart_clear', methods: ['GET'])]
+    public function clear(Request $request, CartHelper $cartHelper): Response
     {
-        $form = $this->createForm(CartType::class, $cart);
-        $form->handleRequest($request);
+        $session = $request->getSession();
+        $cartHelper->clearCart($session);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $cartRepository->save($cart, true);
-
-            return $this->redirectToRoute('app_cart_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('cart/edit.html.twig', [
-            'cart' => $cart,
-            'form' => $form,
-        ]);
+       return $this->redirectToRoute('app_default');
     }
-
-    #[Route('/{id}', name: 'app_cart_delete', methods: ['POST'])]
-    public function delete(Request $request, Cart $cart, CartRepository $cartRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete' . $cart->getId(), $request->request->get('_token'))) {
-            $cartRepository->remove($cart, true);
-        }
-
-        return $this->redirectToRoute('app_cart_index', [], Response::HTTP_SEE_OTHER);
-    }
+  
 }
