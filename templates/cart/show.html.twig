@@ -7,12 +7,14 @@
 
 {% block body %}
 
-	<div class="container my-5 p-3">
+	<div class="container my-5 p-3" {{stimulus_controller('refresh',{refreshUrl:path('app_cart_show')})}} data-action="cart:event_updateCart->refresh#reloadContent cart:event_updateCart@document->event-dispatcher#dispatchUpdateCartItemsCount">
 
 		<h1 class="text-center fs-1 fw-bold">Cart</h1>
 		<hr/>
 
-		{{include('cart/_form.html.twig')}}
+		<div data-refresh-target="refreshContent">
+			{{include('cart/_form.html.twig')}}
+		</div>
 
 	</div>
 

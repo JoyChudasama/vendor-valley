@@ -62,7 +62,7 @@
 
 {% if not is_cart_empty %}
 
-	<div class="row my-5">
+	<div class="row my-5" {{stimulus_controller('cart')}}>
 		{{form_start(form)}}
 
 		<div class="col-12">
@@ -78,7 +78,15 @@
 		</div>
 
 		<div class="col-12 mt-5">
-			<button class="btn btn-success">Continue to Checkout</button>
+			<div class="row">
+				<div class="col-3">
+					<button class="btn btn-success">Continue to Checkout</button>
+				</div>
+
+				<div class="col-3">
+					<button class="btn btn-danger" data-action="cart#clearCart" data-cart-clear-cart-url-param="{{path('app_cart_clear')}}">Clear Cart</button>
+				</div>
+			</div>
 		</div>
 
 		{{form_widget(form._token)}}

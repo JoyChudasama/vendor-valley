@@ -15,7 +15,26 @@ export default class extends Controller {
 
             showFlash(res.type, res.message);
 
-            this.dispatch('event_updateCartItemsCount', { detail:{numberOfItems: res.cart.numberOfItems} });
+            this.dispatch('event_updateCartItemsCount', { detail: { numberOfItems: res.cart.numberOfItems } });
+
+        } catch (e) {
+            const res = e.responseJSON;
+            return showFlash(res.type, res.message);
+        }
+    }
+
+    async clearCart(e) {
+        e.preventDefault();
+        
+        const params = e.params;
+
+        try {
+            const res = await $.getJSON(params.clearCartUrl);
+
+            showFlash(res.type, res.message);
+
+            this.dispatch('event_updateCart');
+            this.dispatch('event_updateCartItemsCount', { detail: { numberOfItems: res.cart.numberOfItems } });
 
         } catch (e) {
             const res = e.responseJSON;

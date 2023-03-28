@@ -32,10 +32,12 @@ class CartController extends AbstractController
 
         $cart = $cartHelper->getCart($session);
         $isCartEmpty = count($cart->getCartItems()->getValues()) === 0;
-       
+
         $form = $this->createForm(CartType::class, $cart);
 
-        return $this->render('cart/show.html.twig', [
+        $template = $request->isXmlHttpRequest() ? 'cart/_form.html.twig' : 'cart/show.html.twig';
+
+        return $this->render($template, [
             'cart' => $cart,
             'form' => $form->createView(),
             'is_cart_empty' => $isCartEmpty
@@ -48,7 +50,12 @@ class CartController extends AbstractController
         $session = $request->getSession();
         $cartHelper->clearCart($session);
 
-       return $this->redirectToRoute('app_default');
+        return new JsonResponse([
+            'type' => 'success',
+            'message' => 'Cart cleared successfully!!!',
+            'cart' => [
+                'numberOfItems' => 0,
+            ]
+        ], 200);
     }
-  
 }
