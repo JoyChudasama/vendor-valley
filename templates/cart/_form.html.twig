@@ -1,19 +1,95 @@
+{% import _self as formMacros %}
+
+{% macro printCartItemRow(cartItemForm) %}
+	{% set product = cartItemForm.vars.value.product %}
+	{% set quantity = cartItemForm.quantity.vars.value %}
+	{% set price = product.price %}
+	{% set totalPrice = product.price * quantity %}
+
+
+	<div class="row" {{stimulus_controller('cart-item')}}>
+
+		{{form_errors(cartItemForm)}}
+
+		<div class="col-4">
+			{{form_row(cartItemForm.product,{'attr':{'readonly':'readonly'}})}}
+		</div>
+
+		<div class="col-3">
+
+			<div class="row">
+
+				<div class="col-12">
+					{{form_label(cartItemForm.quantity)}}
+				</div>
+
+				<div class="col-2">
+					<button class="btn btn-outline-secondary decrease-quantity" data-action="cart-item#decreaseCartItemQuantity">-</button>
+				</div>
+
+				<div class="col-6">
+					{{form_widget(cartItemForm.quantity,{'attr':{'class':'text-center cart-item-quantity','data-cart-item-target':'cartItemQuantityInput','min':'1'} })}}
+				</div>
+
+				<div class="col-2">
+					<button class="btn btn-outline-secondary increase-quantity" data-action="cart-item#increaceCartItemQuantity">+</button>
+				</div>
+
+			</div>
+
+		</div>
+
+		<div class="col-2">
+			<div class="mb-3">
+				<label for="product_price" class="form-label required">Price</label>
+				<input type="text" id="product_price" name="product[price]" required="required" class="form-control" value={{price|currency}} readonly>
+			</div>
+		</div>
+
+		<div class="col-2">
+			<div class="mb-3">
+				<label for="product_total_price" class="form-label required">Total Price</label>
+				<input type="text" id="product_total_price" name="product[totalPrice]" required="required" class="form-control" value={{totalPrice|currency}} readonly>
+			</div>
+		</div>
+
+		<div class="col-1">
+			<button type="button" class="btn-close float-end" aria-label="Close"></button>
+		</div>
+	</div>
+
+{% endmacro %}
+
 {% if not is_cart_empty %}
 
-	{{form_start(form)}}
+	<div class="row my-5">
+		{{form_start(form)}}
 
-	{% for cartItem in form.cartItems %}
-		{{form_row(cartItem)}}
+		<div class="col-12">
 
-	{% endfor %}
-	
-	{{form_row(form.totalAmount)}}
+			{% for cartItem in form.cartItems %}
+				{{formMacros.printCartItemRow(cartItem)}}
+			{% endfor %}
 
-	<button class="btn">{{ button_label|default('Save') }}</button>
+		</div>
 
-	{{form_widget(form._token)}}
-	{{form_end(form,{'render_rest':false})}}
+		<div class="col-4 mt-5">
+			{{form_row(form.totalAmount)}}
+		</div>
+
+		<div class="col-12 mt-5">
+			<button class="btn btn-success">Continue to Checkout</button>
+		</div>
+
+		{{form_widget(form._token)}}
+		{{form_end(form,{'render_rest':false})}}
+	</div>
+
 {% else %}
-	Cart is Empty
+	<div class="row my-5">
+		<div class="col-12 text-center">
+			Cart is Empty
+		</div>
+	</div>
 
 {% endif %}

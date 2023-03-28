@@ -30,7 +30,8 @@ class CartItemHelper
 
             $sessionCartItem = $cartItems[$product->getId()];
             $sessionCartItem->setQuantity($sessionCartItem->getQuantity() + 1);
-            $cart->setTotalAmount($sessionCartItem->getQuantity() * $sessionCartItem->getProduct()->getPrice());
+
+            $cart->setTotalAmount($cart->getTotalAmount() + $sessionCartItem->getProduct()->getPrice());
 
             return;
         }
