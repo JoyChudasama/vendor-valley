@@ -7,7 +7,7 @@
 
 {% block body %}
 
-	<div class="container my-5 p-3" {{stimulus_controller('cart')}} data-action="event-dispatcher:event_addToCart@document->cart#addToCart cart:event_updateCartItemsCount->global#updateCartItemsCount " >
+	<div class="container my-5 p-3" {{stimulus_controller('product')}} data-action="event-dispatcher:event_addToCart@document->product#addToCart product:event_updateCartItemsCount@document->global#updateCartItemsCount">
 
 
 		{% for vendor in vendors %}
