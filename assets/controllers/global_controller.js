@@ -12,7 +12,7 @@ export default class extends Controller {
     }
 
     connect() {
-        this.setNumberOfCartItems();
+        this.updateCartItemsCount();
     }
 
     hideFlash(e) {
@@ -21,16 +21,9 @@ export default class extends Controller {
     }
 
     updateCartItemsCount(e) {
-        e.preventDefault();
+        e && e.preventDefault();
         
-        const params = e.detail;
-        this.numberOfCartItemsTarget.innerHTML = params.numberOfItems ?? this.setNumberOfCartItems();
-    }
-
-    setNumberOfCartItems() {
         $.get(this.numberOfCartItemsUrlValue).then((res) => this.numberOfCartItemsTarget.innerHTML = res.numberOfItems)
     }
-
-
 
 }

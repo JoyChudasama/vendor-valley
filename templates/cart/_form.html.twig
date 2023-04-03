@@ -62,7 +62,7 @@
 
 {% if not is_cart_empty %}
 
-	<div class="row my-5" {{stimulus_controller('cart')}} data-action="event-dispatcher:event_updateCartItemsCount->global#updateCartItemsCount">
+	<div class="row my-5" {{stimulus_controller('cart')}} data-action="cart:event_updateCartItemsCount->global#updateCartItemsCount">
 		{{form_start(form)}}
 
 		<div class="col-12">
@@ -84,7 +84,7 @@
 				</div>
 
 				<div class="col-3">
-					<button class="btn btn-danger" data-action="cart#clearCart event-dispatcher#dispatchUpdateCartItemsCount" data-cart-clear-cart-url-param="{{path('app_cart_clear')}}" data-event-dispatcher-number-of-items-param="0">Clear Cart</button>
+					<button class="btn btn-danger" data-action="cart#clearCart" data-cart-clear-cart-url-param="{{path('app_cart_clear')}}">Clear Cart</button>
 				</div>
 			</div>
 		</div>

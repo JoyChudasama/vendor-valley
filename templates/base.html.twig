@@ -25,15 +25,15 @@
 			{{include('components/nav.html.twig')}}
 		{% endblock %}
 
-		<main {{stimulus_controller('event-dispatcher')}}>
+		<main>
 		
 			<div class="container flash-container" id="flash-container">
-				<div class="row pt-2" data-action="event-dispatcher:event_hideFlash@document->global#hideFlash">
+				<div class="row pt-2">
 					
 					<div class="col-12 d-none" id="js-flash">
 						<div class="alert alert-dismissible fade show" role="alert">
 							<span id="flash-message"></span>
-							<button type="button" class="btn-close" data-action="event-dispatcher#dispatchHideFlash"></button>
+							<button type="button" class="btn-close" data-action="global#hideFlash"></button>
 						</div>
 					</div>
 					

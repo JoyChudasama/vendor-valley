@@ -12,16 +12,14 @@ export default class extends Controller {
 
         try {
             const res = await $.getJSON(params.clearCartUrl);
-
-            showFlash(res.type, res.message);
-
+            
             this.dispatch('event_updateCart');
-            this.dispatch('event_updateCartItemsCount', { detail: { numberOfItems: res.cart.numberOfItems } });
-
+            this.dispatch('event_updateCartItemsCount', { detail: { numberOfItems: 0 } });
+            
+            showFlash(res.type, res.message);
         } catch (e) {
             const res = e.responseJSON;
             return showFlash(res.type, res.message);
         }
-
     }
 }
