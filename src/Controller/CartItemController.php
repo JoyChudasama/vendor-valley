@@ -40,7 +40,7 @@ class CartItemController extends AbstractController
         try {
             $session = $request->getSession();
 
-            $cartItemHelper->removeFromCart($product, $session);
+            $cartItemHelper->removeFromCart($product, $session, true);
 
             return new JsonResponse([
                 'type' => 'success',
@@ -53,7 +53,7 @@ class CartItemController extends AbstractController
             ], 400);
         }
     }
-    
+
     #[Route('/{id}/increase/quantity', name: 'app_cart_item_increase_quantity', methods: ['GET', 'POST'])]
     public function increaseQuantity(Request $request, CartItemHelper $cartItemHelper, Product $product): JsonResponse
     {

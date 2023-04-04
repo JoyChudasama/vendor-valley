@@ -22,35 +22,32 @@ class CartItemHelper
         if (!$user) return throw new Exception('Please login');
 
         $cart = $this->cartHelper->getCart($session);
-        $cartItems = $cart->getCartItems();
 
         $isAlreadyAdded = $this->isCartItemAlreadyAdded($product, $session);
 
         if ($isAlreadyAdded) {
+            $cartItem = $this->getCartItemFromProduct($product, $session);
+            $cartItem->setQuantity($cartItem->getQuantity() + 1);
 
-            $sessionCartItem = $cartItems[$product->getId()];
-            $sessionCartItem->setQuantity($sessionCartItem->getQuantity() + 1);
-
-            $cart->setTotalAmount($cart->getTotalAmount() + $sessionCartItem->getProduct()->getPrice());
-
-            return;
+            return $cart->setTotalAmount($cart->getTotalAmount() + $cartItem->getProduct()->getPrice());
         }
 
         $cartItem = new CartItem();
         $cartItem->setProduct($product);
-        $cartItems[$product->getId()] = $cartItem;
-
-        $session->set('cart_items', $cartItems);
 
         $cart->addCartItem($cartItem);
+        $cart->setTotalAmount($cart->getTotalAmount() + $cartItem->getProduct()->getPrice());
     }
 
-    public function removeFromCart(Product $product, Session $session)
+    public function removeFromCart(Product $product, Session $session, bool $isRemovingAllQuantity)
     {
         try {
             $cart = $this->cartHelper->getCart($session);
             $cartItem = $this->getCartItemFromProduct($product, $session);
             $cart->removeCartItem($cartItem);
+
+            if ($isRemovingAllQuantity) return $cart->setTotalAmount($cart->getTotalAmount() - ($product->getPrice() * $cartItem->getQuantity()));
+
             $cart->setTotalAmount($cart->getTotalAmount() - $product->getPrice());
         } catch (Exception $e) {
             return throw new Exception('Something went wrong. Try again');
@@ -76,17 +73,16 @@ class CartItemHelper
             $cart = $this->cartHelper->getCart($session);
             $cartItem = $this->getCartItemFromProduct($product, $session);
 
-            if ($cartItem->getQuantity() === 1) return $this->removeFromCart($product, $session);
+            if ($cartItem->getQuantity() === 1) return  $this->removeFromCart($product, $session, false);
 
             $cartItem->setQuantity($cartItem->getQuantity() - 1);
-            $cart->setTotalAmount($cart->getTotalAmount() - ($product->getPrice() * $cartItem->getQuantity()));
-
+            $cart->setTotalAmount($cart->getTotalAmount() - $product->getPrice());
         } catch (Exception $e) {
             return throw new Exception('Something went wrong. Try again');
         }
     }
 
-    private function getCartItemFromProduct(Product $product, Session $session)
+    private function getCartItemFromProduct(Product $product, Session $session): ?CartItem
     {
         $cart = $this->cartHelper->getCart($session);
 
