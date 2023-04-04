@@ -14,7 +14,7 @@ export default class extends Controller {
             const res = await $.getJSON(params.clearCartUrl);
             
             this.dispatch('event_updateCart');
-            this.dispatch('event_updateCartItemsCount', { detail: { numberOfItems: 0 } });
+            this.dispatch('event_updateCartItemsCount');
             
             showFlash(res.type, res.message);
         } catch (e) {

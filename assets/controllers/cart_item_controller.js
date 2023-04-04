@@ -1,4 +1,6 @@
 import { Controller } from '@hotwired/stimulus';
+import { showFlash } from '../js/helper/flash_helper';
+import $ from 'jquery';
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
@@ -11,18 +13,55 @@ export default class extends Controller {
         this.cartItemQuantity = parseInt(this.cartItemQuantityInputTarget.value);
     }
 
-    decreaseCartItemQuantity(e) {
+    async increaceCartItemQuantity(e) {
         e.preventDefault();
 
-        if (this.cartItemQuantity === this.minCartItemQuantity) return;
+        const params = e.params;
 
-        this.cartItemQuantity -= 1;
-        this.cartItemQuantityInputTarget.value = this.cartItemQuantity;
+        try {
+            const res = await $.getJSON(params.increaseCartItemQuantityUrl);
+
+            this.dispatch('event_updateCart');
+            this.dispatch('event_updateCartItemsCount');
+
+        } catch (e) {
+            const res = e.responseJSON;
+            return showFlash(res.type, res.message);
+        }
+    }
+    
+    async decreaseCartItemQuantity(e) {
+        e.preventDefault();
+
+        const params = e.params;
+
+        try {
+            const res = await $.getJSON(params.decreaseCartItemQuantityUrl);
+
+            this.dispatch('event_updateCart');
+            this.dispatch('event_updateCartItemsCount');
+
+        } catch (e) {
+            const res = e.responseJSON;
+            return showFlash(res.type, res.message);
+        }
     }
 
-    increaceCartItemQuantity(e) {
+    async removeItem(e) {
         e.preventDefault();
-        this.cartItemQuantity += 1
-        this.cartItemQuantityInputTarget.value = this.cartItemQuantity;
+
+        const params = e.params;
+
+        try {
+            const res = await $.getJSON(params.removeCartItemUrl);
+
+            this.dispatch('event_updateCart');
+            this.dispatch('event_updateCartItemsCount');
+
+            showFlash(res.type, res.message);
+        } catch (e) {
+            const res = e.responseJSON;
+            return showFlash(res.type, res.message);
+        }
     }
 }

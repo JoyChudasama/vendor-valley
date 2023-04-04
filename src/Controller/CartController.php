@@ -21,7 +21,9 @@ class CartController extends AbstractController
     {
         $session = $request->getSession();
 
-        $cartItems = $session->get('cart_items', []);
+        $cart = $session->get('cart', []);
+        $cartItems = $cart->getCartItems();
+        
         return new JsonResponse(['numberOfItems' => count($cartItems)], 200);
     }
 

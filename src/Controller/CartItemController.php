@@ -17,21 +17,14 @@ class CartItemController extends AbstractController
     #[Route('/{id}/new', name: 'app_cart_item_new', methods: ['GET', 'POST'])]
     public function new(Request $request, CartItemHelper $cartItemHelper, Product $product): JsonResponse
     {
-
         try {
             $session = $request->getSession();
 
             $cartItemHelper->addToCart($product, $session);
 
-            $cartItems = $session->get('cart_items', []);
-
             return new JsonResponse([
                 'type' => 'success',
-                'message' => 'Product Added to cart successfully!!!',
-                'cart' => [
-                    'numberOfItems' => count($cartItems),
-                ]
-
+                'message' => 'Product Added to cart successfully!!!'
             ], 200);
         } catch (Exception $e) {
             return new JsonResponse([
@@ -41,4 +34,63 @@ class CartItemController extends AbstractController
         }
     }
 
+    #[Route('/{id}/remove', name: 'app_cart_item_remove', methods: ['GET', 'POST'])]
+    public function remove(Request $request, CartItemHelper $cartItemHelper, Product $product): JsonResponse
+    {
+        try {
+            $session = $request->getSession();
+
+            $cartItemHelper->removeFromCart($product, $session);
+
+            return new JsonResponse([
+                'type' => 'success',
+                'message' => 'Product Removed from cart successfully!!!'
+            ], 200);
+        } catch (Exception $e) {
+            return new JsonResponse([
+                'type' => 'warning',
+                'message' => $e->getMessage()
+            ], 400);
+        }
+    }
+    
+    #[Route('/{id}/increase/quantity', name: 'app_cart_item_increase_quantity', methods: ['GET', 'POST'])]
+    public function increaseQuantity(Request $request, CartItemHelper $cartItemHelper, Product $product): JsonResponse
+    {
+        try {
+            $session = $request->getSession();
+
+            $cartItemHelper->increaseQuantity($product, $session);
+
+            return new JsonResponse([
+                'type' => 'success',
+                'message' => 'Product Quantity Increased successfully!!!'
+            ], 200);
+        } catch (Exception $e) {
+            return new JsonResponse([
+                'type' => 'warning',
+                'message' => $e->getMessage()
+            ], 400);
+        }
+    }
+
+    #[Route('/{id}/decrease/quantity', name: 'app_cart_item_decrease_quantity', methods: ['GET', 'POST'])]
+    public function decreaseQuantity(Request $request, CartItemHelper $cartItemHelper, Product $product): JsonResponse
+    {
+        try {
+            $session = $request->getSession();
+
+            $cartItemHelper->decreaseQuantity($product, $session);
+
+            return new JsonResponse([
+                'type' => 'success',
+                'message' => 'Product Quantity Decreased successfully!!!'
+            ], 200);
+        } catch (Exception $e) {
+            return new JsonResponse([
+                'type' => 'warning',
+                'message' => $e->getMessage()
+            ], 400);
+        }
+    }
 }

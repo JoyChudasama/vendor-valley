@@ -61,7 +61,6 @@ class Cart extends Base
             $this->cartItems->add($cartItem);
             $cartItem->setCart($this);
 
-            $this->totalAmount += $cartItem->getProduct()->getPrice() * $cartItem->getQuantity();
         }
 
         return $this;
@@ -74,7 +73,6 @@ class Cart extends Base
             if ($cartItem->getCart() === $this) {
                 $cartItem->setCart(null);
 
-                $this->totalAmount -= $cartItem->getProduct()->getPrice() * $cartItem->getQuantity();
             }
         }
 

@@ -6,8 +6,7 @@
 	{% set price = product.price %}
 	{% set totalPrice = product.price * quantity %}
 
-
-	<div class="row" {{stimulus_controller('cart-item remove-element')}} data-remove-element-target="element">
+	<div class="row" {{stimulus_controller('cart-item')}} data-action="cart-item:event_updateCartItemsCount->global#updateCartItemsCount cart-item:event_updateCart->refresh#reloadContent">
 
 		{{form_errors(cartItemForm)}}
 
@@ -24,7 +23,7 @@
 				</div>
 
 				<div class="col-2">
-					<button class="btn btn-outline-secondary decrease-quantity" data-action="cart-item#decreaseCartItemQuantity">-</button>
+					<button class="btn btn-outline-secondary decrease-quantity" data-action="cart-item#decreaseCartItemQuantity" data-cart-item-decrease-cart-item-quantity-url-param="{{path('app_cart_item_decrease_quantity',{'id':product.id})}}">-</button>
 				</div>
 
 				<div class="col-6">
@@ -32,7 +31,7 @@
 				</div>
 
 				<div class="col-2">
-					<button class="btn btn-outline-secondary increase-quantity" data-action="cart-item#increaceCartItemQuantity">+</button>
+					<button class="btn btn-outline-secondary increase-quantity" data-action="cart-item#increaceCartItemQuantity" data-cart-item-increase-cart-item-quantity-url-param="{{path('app_cart_item_increase_quantity',{'id':product.id})}}">+</button>
 				</div>
 
 			</div>
@@ -54,7 +53,7 @@
 		</div>
 
 		<div class="col-1">
-			<button type="button" class="btn-close float-end" aria-label="Close" data-action="remove-element#remove"></button>
+			<button type="button" class="btn-close float-end" aria-label="Close" data-action="click->cart-item#removeItem" data-cart-item-remove-cart-item-url-param="{{path('app_cart_item_remove',{'id':product.id})}}"></button>
 		</div>
 	</div>
 
