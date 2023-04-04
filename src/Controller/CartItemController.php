@@ -93,4 +93,20 @@ class CartItemController extends AbstractController
             ], 400);
         }
     }
+
+    #[Route('/{id}/buy/now', name: 'app_cart_item_buy_now', methods: ['GET', 'POST'])]
+    public function buyNow(Request $request, CartItemHelper $cartItemHelper, Product $product): Response
+    {
+        try {
+            $session = $request->getSession();
+
+            $cartItemHelper->addToCart($product, $session);
+
+            return $this->redirectToRoute('app_cart_show');
+        } catch (Exception $e) {
+            $this->addFlash('error', $e->getMessage());
+
+            return $this->redirectToRoute('app_default');
+        }
+    }
 }
