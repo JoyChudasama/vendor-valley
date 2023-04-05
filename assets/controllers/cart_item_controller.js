@@ -6,54 +6,25 @@ import $ from 'jquery';
 export default class extends Controller {
 
     static targets = ['cartItemQuantityInput'];
-    cartItemQuantity = 0;
-    minCartItemQuantity = 1;
-
-    connect() {
-        this.cartItemQuantity = parseInt(this.cartItemQuantityInputTarget.value);
-    }
 
     async increaceCartItemQuantity(e) {
         e.preventDefault();
-
-        const params = e.params;
-
-        try {
-            const res = await $.getJSON(params.increaseCartItemQuantityUrl);
-
-            this.dispatch('event_updateCart');
-            this.dispatch('event_updateCartItemsCount');
-
-        } catch (e) {
-            const res = e.responseJSON;
-            return showFlash(res.type, res.message);
-        }
+        await this.getJsonAndDispatchEvents(e.params.increaseCartItemQuantityUrl);
     }
-    
+
     async decreaseCartItemQuantity(e) {
         e.preventDefault();
-
-        const params = e.params;
-
-        try {
-            const res = await $.getJSON(params.decreaseCartItemQuantityUrl);
-
-            this.dispatch('event_updateCart');
-            this.dispatch('event_updateCartItemsCount');
-
-        } catch (e) {
-            const res = e.responseJSON;
-            return showFlash(res.type, res.message);
-        }
+        await this.getJsonAndDispatchEvents(e.params.decreaseCartItemQuantityUrl);
     }
 
     async removeItem(e) {
         e.preventDefault();
+        await this.getJsonAndDispatchEvents(e.params.removeCartItemUrl);
+    }
 
-        const params = e.params;
-
+    async getJsonAndDispatchEvents(url) {
         try {
-            const res = await $.getJSON(params.removeCartItemUrl);
+            const res = await $.getJSON(url);
 
             this.dispatch('event_updateCart');
             this.dispatch('event_updateCartItemsCount');
