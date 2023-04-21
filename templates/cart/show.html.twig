@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{parent()}}
+	| Cart
+{% endblock %}
+
+{% block body %}
+
+	<div class="container my-5 p-3" {{stimulus_controller('refresh',{refreshUrl:path('app_cart_show')})}} data-action="cart:event_updateCart->refresh#reloadContent">
+
+		<h1 class="text-center fs-1 fw-bold">Cart</h1>
+		<hr/>
+
+		<div data-refresh-target="refreshContent">
+			{{include('cart/_form.html.twig')}}
+		</div>
+
+	</div>
+
+{% endblock %}

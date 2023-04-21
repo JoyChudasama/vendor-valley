@@ -4,7 +4,6 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Entity\Vendor;
-use Doctrine\ORM\EntityManagerInterface;
 
 class UserVendorHelper
 {

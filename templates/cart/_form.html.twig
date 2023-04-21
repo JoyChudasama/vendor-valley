@@ -1,0 +1,102 @@
+{% import _self as formMacros %}
+
+{% macro printCartItemRow(cartItemForm) %}
+	{% set product = cartItemForm.vars.value.product %}
+	{% set quantity = cartItemForm.quantity.vars.value %}
+	{% set price = product.price %}
+	{% set totalPrice = product.price * quantity %}
+
+	<div class="row" {{stimulus_controller('cart-item')}} data-action="cart-item:event_updateCartItemsCount->global#updateCartItemsCount cart-item:event_updateCart->refresh#reloadContent">
+
+		{{form_errors(cartItemForm)}}
+
+		<div class="col-4">
+			{{form_row(cartItemForm.product,{'attr':{'readonly':'readonly'}})}}
+		</div>
+
+		<div class="col-3">
+
+			<div class="row">
+
+				<div class="col-12">
+					{{form_label(cartItemForm.quantity)}}
+				</div>
+
+				<div class="col-2">
+					<button class="btn btn-outline-secondary decrease-quantity" data-action="cart-item#decreaseCartItemQuantity" data-cart-item-decrease-cart-item-quantity-url-param="{{path('app_cart_item_decrease_quantity',{'id':product.id})}}">-</button>
+				</div>
+
+				<div class="col-6">
+					{{form_widget(cartItemForm.quantity,{'attr':{'class':'text-center cart-item-quantity','min':'1'} })}}
+				</div>
+
+				<div class="col-2">
+					<button class="btn btn-outline-secondary increase-quantity" data-action="cart-item#increaceCartItemQuantity" data-cart-item-increase-cart-item-quantity-url-param="{{path('app_cart_item_increase_quantity',{'id':product.id})}}">+</button>
+				</div>
+
+			</div>
+
+		</div>
+
+		<div class="col-2">
+			<div class="mb-3">
+				<label for="product_price" class="form-label required">Price</label>
+				<input type="text" id="product_price" name="product[price]" required="required" class="form-control" value={{price|currency}} readonly>
+			</div>
+		</div>
+
+		<div class="col-2">
+			<div class="mb-3">
+				<label for="product_total_price" class="form-label required">Total Price</label>
+				<input type="text" id="product_total_price" name="product[totalPrice]" required="required" class="form-control" value={{totalPrice|currency}} readonly>
+			</div>
+		</div>
+
+		<div class="col-1">
+			<button type="button" class="btn-close float-end" aria-label="Close" data-action="click->cart-item#removeItem" data-cart-item-remove-cart-item-url-param="{{path('app_cart_item_remove',{'id':product.id})}}"></button>
+		</div>
+	</div>
+
+{% endmacro %}
+
+{% if not is_cart_empty %}
+
+	<div class="row my-5" {{stimulus_controller('cart')}} data-action="cart:event_updateCartItemsCount->global#updateCartItemsCount">
+		{{form_start(form)}}
+
+		<div class="col-12">
+
+			{% for cartItem in form.cartItems %}
+				{{formMacros.printCartItemRow(cartItem)}}
+			{% endfor %}
+
+		</div>
+
+		<div class="col-4 mt-5">
+			{{form_row(form.totalAmount)}}
+		</div>
+
+		<div class="col-12 mt-5">
+			<div class="row">
+				<div class="col-3">
+					<button class="btn btn-success">Continue to Checkout</button>
+				</div>
+
+				<div class="col-3">
+					<button class="btn btn-danger" data-action="cart#clearCart" data-cart-clear-cart-url-param="{{path('app_cart_clear')}}">Clear Cart</button>
+				</div>
+			</div>
+		</div>
+
+		{{form_widget(form._token)}}
+		{{form_end(form,{'render_rest':false})}}
+	</div>
+
+{% else %}
+	<div class="row my-5">
+		<div class="col-12 text-center">
+			Cart is Empty
+		</div>
+	</div>
+
+{% endif %}

@@ -59,10 +59,14 @@ class User extends Base implements UserInterface, PasswordAuthenticatedUserInter
     #[ORM\Column(nullable: true)]
     private ?bool $becomeVendor = null;
 
+    #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Cart::class)]
+    private Collection $carts;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
         $this->vendors = new ArrayCollection();
+        $this->carts = new ArrayCollection();
     }
 
     public function __toString()
@@ -274,6 +278,36 @@ class User extends Base implements UserInterface, PasswordAuthenticatedUserInter
     public function setBecomeVendor(?bool $becomeVendor): self
     {
         $this->becomeVendor = $becomeVendor;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Cart>
+     */
+    public function getCarts(): Collection
+    {
+        return $this->carts;
+    }
+
+    public function addCart(Cart $cart): self
+    {
+        if (!$this->carts->contains($cart)) {
+            $this->carts->add($cart);
+            $cart->setCustomer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCart(Cart $cart): self
+    {
+        if ($this->carts->removeElement($cart)) {
+            // set the owning side to null (unless already changed)
+            if ($cart->getCustomer() === $this) {
+                $cart->setCustomer(null);
+            }
+        }
 
         return $this;
     }

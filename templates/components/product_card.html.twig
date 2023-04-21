@@ -8,8 +8,9 @@
 
     <div class="col-12">
         <div class="card-body row">
-            <div class="col-12 my-2">
+            <div class="col-12 my-2 d-flex justify-content-between">
                 <h5 class="card-title fw-bold">{{product.name}}</h5>
+                <span class="p-1 border border-primary rounded price">{{product.price|currency}}</span>
             </div>
 
             <div class="col-12 my-2">
@@ -20,10 +21,11 @@
                 <span class="p-2 rounded-pill bg-dark text-white">Category 1</span>
                 <span class="p-2 rounded-pill bg-dark text-white">Category 2</span>
             </div>
+      
             
             <div class="col-12 button-container">
 
-                <a href="#buyNow" class="btn btn-md btn-primary my-2 buy-now-button">
+                <a href="{{path('app_cart_item_buy_now',{'id':product.id})}}" class="btn btn-md btn-primary my-2 buy-now-button">
                     <span class="mr-2">Buy Now</span>
 
                     <svg class="buyNowIcon">
@@ -31,12 +33,12 @@
                     </svg>
                 </a>
 
-                <a href="#addToCart" class="btn btn-md btn-primary add-to-cart-button">
-                    <span class="mr-2">Add to cart</span>
-                    <svg class="cartIcon">
-                        <use xlink: href="/icons.svg#cartIcon"></use>
+                <button class="btn btn-md btn-primary add-to-cart-button" data-action="product#addToCart" data-product-url-param="{{path('app_cart_item_new',{'id':product.id})}}">
+                    <span class="mr-2">Add to cart</span> 
+                    <svg class="addToaddToCartIcon">
+                        <use xlink: href="/icons.svg#addToaddToCartIcon"></use>
                     </svg>
-                </a>
+                </button>
             </div>
         </div>
     </div>
