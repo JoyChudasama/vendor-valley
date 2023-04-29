@@ -19,9 +19,12 @@
 				{% if app.user %}
 
 					<li class="nav-item">
-						<a class="nav-link cart" href="{{path('app_cart_show')}}">
-							<span>Cart</span>
-							<span data-global-target="numberOfCartItems"></span>
+						<a class="nav-link cart btn me-2 position-relative" href="{{path('app_cart_show')}}">
+							<i class="fa fa-cart-shopping h6"></i>
+							<span class="position-absolute mt-2 start-100 translate-middle badge rounded-pill bg-success p-1">
+								<span class="visually-hidden">Cart</span>
+								<span data-global-target="numberOfCartItems" class=""></span>
+							</span>
 						</a>
 					</li>
 
