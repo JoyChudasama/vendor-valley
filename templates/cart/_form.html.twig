@@ -87,9 +87,7 @@
 				{{form_end(form,{'render_rest':false})}}
 
 				<div class="col-3">
-					<form action="/checkout" method="POST">
-						<button type="submit" class="btn btn-success">Checkout</button>
-					</form>
+					{{include('checkout/_form.html.twig',{form:checkout_form})}}
 				</div>
 			</div>
 		</div>

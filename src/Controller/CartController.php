@@ -2,9 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Cart;
 use App\Form\CartType;
-use App\Repository\CartRepository;
+use App\Form\CheckoutType;
 use App\Service\CartHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -37,13 +36,16 @@ class CartController extends AbstractController
         $isCartEmpty = count($cart->getCartItems()->getValues()) === 0;
 
         $form = $this->createForm(CartType::class, $cart);
-
+        $checkoutForm = $this->createForm(CheckoutType::class, null, [
+            'action'=>$this->generateUrl('app_checkout')
+        ]);
         $template = $request->isXmlHttpRequest() ? 'cart/_form.html.twig' : 'cart/show.html.twig';
 
         return $this->render($template, [
             'cart' => $cart,
             'form' => $form->createView(),
-            'is_cart_empty' => $isCartEmpty
+            'is_cart_empty' => $isCartEmpty,
+            'checkout_form'=>$checkoutForm->createView()
         ]);
     }
 

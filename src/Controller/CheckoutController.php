@@ -9,9 +9,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[Route('/checkout')]
 class CheckoutController extends AbstractController
 {
-    #[Route('/checkout', name: 'app_checkout')]
+    #[Route('/', name: 'app_checkout')]
     public function checkout(Request $request, CheckoutHelper $checkoutHelper): Response
     {
         $session = $request->getSession();
