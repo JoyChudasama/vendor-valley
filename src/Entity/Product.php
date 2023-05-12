@@ -31,7 +31,7 @@ class Product extends Base
     #[ORM\Column(nullable: true)]
     private ?bool $isListed = false;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductImage::class, cascade:['persist','remove'])]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductImage::class, cascade: ['persist', 'remove'])]
     private Collection $productImages;
 
     public $tempProductImages;
