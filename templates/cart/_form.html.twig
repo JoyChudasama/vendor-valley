@@ -22,16 +22,16 @@
 					{{form_label(cartItemForm.quantity)}}
 				</div>
 
-				<div class="col-2">
-					<button class="btn btn-outline-secondary decrease-quantity" data-action="cart-item#decreaseCartItemQuantity" data-cart-item-decrease-cart-item-quantity-url-param="{{path('app_cart_item_decrease_quantity',{'id':product.id})}}">-</button>
+				<div class="col-2 px-0">
+					<button class="btn btn-outline-secondary decrease-quantity px-2" data-action="cart-item#decreaseCartItemQuantity" data-cart-item-decrease-cart-item-quantity-url-param="{{path('app_cart_item_decrease_quantity',{'id':product.id})}}">-</button>
 				</div>
 
-				<div class="col-6">
+				<div class="col-6 px-0">
 					{{form_widget(cartItemForm.quantity,{'attr':{'class':'text-center cart-item-quantity','min':'1'} })}}
 				</div>
 
 				<div class="col-2">
-					<button class="btn btn-outline-secondary increase-quantity" data-action="cart-item#increaceCartItemQuantity" data-cart-item-increase-cart-item-quantity-url-param="{{path('app_cart_item_increase_quantity',{'id':product.id})}}">+</button>
+					<button class="btn btn-outline-secondary increase-quantity px-2" data-action="cart-item#increaceCartItemQuantity" data-cart-item-increase-cart-item-quantity-url-param="{{path('app_cart_item_increase_quantity',{'id':product.id})}}">+</button>
 				</div>
 
 			</div>
@@ -77,19 +77,24 @@
 		</div>
 
 		<div class="col-12 mt-5">
-			<div class="row">
-				<div class="col-3">
-					<button class="btn btn-success">Continue to Checkout</button>
-				</div>
+			<div class="row button-container">
+
 
 				<div class="col-3">
 					<button class="btn btn-danger" data-action="cart#clearCart" data-cart-clear-cart-url-param="{{path('app_cart_clear')}}">Clear Cart</button>
 				</div>
+				{{form_widget(form._token)}}
+				{{form_end(form,{'render_rest':false})}}
+
+				<div class="col-3">
+					<form action="/checkout" method="POST">
+						<button type="submit" class="btn btn-success">Checkout</button>
+					</form>
+				</div>
 			</div>
 		</div>
 
-		{{form_widget(form._token)}}
-		{{form_end(form,{'render_rest':false})}}
+
 	</div>
 
 {% else %}

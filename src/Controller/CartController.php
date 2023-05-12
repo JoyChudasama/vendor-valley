@@ -22,9 +22,10 @@ class CartController extends AbstractController
         $session = $request->getSession();
 
         $cart = $session->get('cart', []);
-        $cartItems = $cart->getCartItems();
-        
-        return new JsonResponse(['numberOfItems' => count($cartItems)], 200);
+
+        $cartItems = empty($cart) ? 0 : count($cart->getCartItems());
+
+        return new JsonResponse(['numberOfItems' => $cartItems], 200);
     }
 
     #[Route('/show', name: 'app_cart_show', methods: ['GET'])]
