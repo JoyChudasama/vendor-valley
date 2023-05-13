@@ -49,6 +49,9 @@ class Product extends Base
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: CartItem::class)]
     private Collection $cartItems;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $quantity = null;
+
     public function __construct()
     {
         $this->productImages = new ArrayCollection();
@@ -217,6 +220,18 @@ class Product extends Base
                 $cartItem->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(?int $quantity): self
+    {
+        $this->quantity = $quantity;
 
         return $this;
     }

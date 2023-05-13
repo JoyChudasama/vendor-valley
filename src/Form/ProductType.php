@@ -3,10 +3,10 @@
 namespace App\Form;
 
 use App\Entity\Product;
-use Doctrine\DBAL\Types\DecimalType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -41,7 +41,11 @@ class ProductType extends AbstractType
                 'label' => 'Images',
                 'required' => false,
                 'mapped' => false,
-                'multiple'=>true,
+                'multiple' => true,
+            ])
+            ->add('quantity', NumberType::class, [
+                'required' => true,
+                'label' => 'Available Quantity',
             ]);
     }
 

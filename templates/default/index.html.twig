@@ -21,19 +21,18 @@
 				<div class="col-12">
 					<div class="products-container row">
 						{% for product in vendor.products %}
-
-							<div class="product-container col-sm-12 col-md-6 col-lg-3 my-3">
-								<a href="#product">
-									{{include('components/product_card.html.twig',{product:product})}}
-								</a>
-							</div>
-
+							{% if product.isListed %}
+								<div class="product-container col-sm-12 col-md-6 col-lg-3 my-3">
+									<a href="#product">
+										{{include('components/product_card.html.twig',{product:product})}}
+									</a>
+								</div>
+							{% endif %}
 						{% else %}
 							<tr>
 								<td colspan="7">No Products Found</td>
 							</tr>
 						{% endfor %}
-
 					</div>
 				</div>
 			</div>
