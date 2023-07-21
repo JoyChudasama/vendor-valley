@@ -12,7 +12,8 @@ class DefaultController extends AbstractController
     #[Route('/', name: 'app_default')]
     public function index(VendorRepository $vendorRepository): Response
     {
-        $allVendors = $vendorRepository->findAll();
+        $allVendors = [];
+        // $allVendors = $vendorRepository->findAll();
 
         return $this->render('default/index.html.twig', [
             'vendors' => $allVendors

@@ -6,7 +6,7 @@ use App\Repository\ProductImageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductImageRepository::class)]
-class ProductImage extends Base
+class ProductImage
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -30,7 +30,7 @@ class ProductImage extends Base
         return $this->encodedImageName;
     }
 
-    public function setEncodedImageName(string $encodedImageName): self
+    public function setEncodedImageName(string $encodedImageName): static
     {
         $this->encodedImageName = $encodedImageName;
 
@@ -42,7 +42,7 @@ class ProductImage extends Base
         return $this->product;
     }
 
-    public function setProduct(?Product $product): self
+    public function setProduct(?Product $product): static
     {
         $this->product = $product;
 
