@@ -3,13 +3,12 @@
 namespace App\Command;
 
 use App\Entity\User;
-use DateTime;
+use App\Entity\UserCustomer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -31,7 +30,6 @@ class CreateAdminUserCommand extends Command
     {
         $this
             ->addArgument('email', InputArgument::REQUIRED, 'email')
-            ->addArgument('username', InputArgument::REQUIRED, 'username')
             ->addArgument('password', InputArgument::REQUIRED, 'password');
     }
 
@@ -40,20 +38,22 @@ class CreateAdminUserCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $email = $input->getArgument('email');
-        $username = $input->getArgument('username');
         $password = $input->getArgument('password');
 
         $user = new User();
         $user->setEmail($email);
-        $user->setUsername($username);
 
         $hashedPassword = $this->passwordHasher->hashPassword($user, $password);
 
         $user->setPassword($hashedPassword);
-        $user->setRoles(['ROLE_ADMIN']);
-        $user->setCreatedAt(new DateTime());
-        $user->setUpdatedAt(new DateTime());
+        $user->setRoles([User::ROLE_ADMIN]);
+        $user->setFirstName('Joy');
+        $user->setLastName('Chudasama');
         
+        $userCustomer = new UserCustomer();
+        $userCustomer->setUser($user);
+        $user->setUserCustomer($userCustomer);
+
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 

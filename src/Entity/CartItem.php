@@ -6,7 +6,7 @@ use App\Repository\CartItemRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CartItemRepository::class)]
-class CartItem extends Base
+class CartItem
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -14,7 +14,6 @@ class CartItem extends Base
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'cartItems')]
-    #[ORM\JoinColumn(nullable: false)]
     private ?Product $product = null;
 
     #[ORM\ManyToOne(inversedBy: 'cartItems')]
@@ -33,7 +32,7 @@ class CartItem extends Base
         return $this->product;
     }
 
-    public function setProduct(?Product $product): self
+    public function setProduct(?Product $product): static
     {
         $this->product = $product;
 
@@ -45,7 +44,7 @@ class CartItem extends Base
         return $this->cart;
     }
 
-    public function setCart(?Cart $cart): self
+    public function setCart(?Cart $cart): static
     {
         $this->cart = $cart;
 
@@ -57,15 +56,10 @@ class CartItem extends Base
         return $this->quantity;
     }
 
-    public function setQuantity(int $quantity): self
+    public function setQuantity(int $quantity): static
     {
         $this->quantity = $quantity;
 
         return $this;
-    }
-
-    public function getTotalAmount(): float
-    {
-        return $this->quantity * $this->product->getPrice();
     }
 }

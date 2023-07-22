@@ -7,12 +7,12 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<CartItem>
+ * @extends ServiceEntityRepository<CartItems>
  *
- * @method CartItem|null find($id, $lockMode = null, $lockVersion = null)
- * @method CartItem|null findOneBy(array $criteria, array $orderBy = null)
- * @method CartItem[]    findAll()
- * @method CartItem[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method CartItems|null find($id, $lockMode = null, $lockVersion = null)
+ * @method CartItems|null findOneBy(array $criteria, array $orderBy = null)
+ * @method CartItems[]    findAll()
+ * @method CartItems[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class CartItemRepository extends ServiceEntityRepository
 {
@@ -21,26 +21,8 @@ class CartItemRepository extends ServiceEntityRepository
         parent::__construct($registry, CartItem::class);
     }
 
-    public function save(CartItem $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->persist($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
-    public function remove(CartItem $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
 //    /**
-//     * @return CartItem[] Returns an array of CartItem objects
+//     * @return CartItems[] Returns an array of CartItems objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +36,7 @@ class CartItemRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?CartItem
+//    public function findOneBySomeField($value): ?CartItems
 //    {
 //        return $this->createQueryBuilder('c')
 //            ->andWhere('c.exampleField = :val')

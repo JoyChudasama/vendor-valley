@@ -5,11 +5,10 @@ namespace App\Entity;
 use App\Repository\VendorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VendorRepository::class)]
-class Vendor extends Base
+class Vendor
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -19,26 +18,41 @@ class Vendor extends Base
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $description = null;
+    #[ORM\Column(length: 255)]
+    private ?string $email = null;
 
-    #[ORM\ManyToOne(inversedBy: 'vendors')]
-    #[ORM\JoinColumn(nullable: false, unique:true)]
+    #[ORM\Column(length: 255)]
+    private ?string $phoneNumber = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $address = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $postalCode = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $city = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $province = null;
+
+    #[ORM\OneToOne(inversedBy: 'vendor', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\OneToMany(mappedBy: 'vendor', targetEntity: Product::class)]
+    #[ORM\OneToMany(mappedBy: 'vendor', targetEntity: Product::class, orphanRemoval: true)]
     private Collection $products;
 
-    #[ORM\OneToMany(mappedBy: 'vendor', targetEntity: Order::class)]
-    private Collection $orders;
+    #[ORM\OneToMany(mappedBy: 'vendor', targetEntity: VendorOrder::class, orphanRemoval: true)]
+    private Collection $vendorOrders;
 
     public function __construct()
     {
         $this->products = new ArrayCollection();
-        $this->orders = new ArrayCollection();
+        $this->vendorOrders = new ArrayCollection();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->name;
     }
@@ -48,38 +62,98 @@ class Vendor extends Base
         return $this->id;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(string $name): static
     {
         $this->name = $name;
 
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getEmail(): ?string
     {
-        return $this->description;
+        return $this->email;
     }
 
-    public function setDescription(?string $description): self
+    public function setEmail(string $email): static
     {
-        $this->description = $description;
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getPhoneNumber(): ?string
+    {
+        return $this->phoneNumber;
+    }
+
+    public function setPhoneNumber(string $phoneNumber): static
+    {
+        $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(string $address): static
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    public function setPostalCode(string $postalCode): static
+    {
+        $this->postalCode = $postalCode;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): static
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getProvince(): ?string
+    {
+        return $this->province;
+    }
+
+    public function setProvince(string $province): static
+    {
+        $this->province = $province;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }
@@ -92,7 +166,7 @@ class Vendor extends Base
         return $this->products;
     }
 
-    public function addProduct(Product $product): self
+    public function addProduct(Product $product): static
     {
         if (!$this->products->contains($product)) {
             $this->products->add($product);
@@ -102,7 +176,7 @@ class Vendor extends Base
         return $this;
     }
 
-    public function removeProduct(Product $product): self
+    public function removeProduct(Product $product): static
     {
         if ($this->products->removeElement($product)) {
             // set the owning side to null (unless already changed)
@@ -115,29 +189,29 @@ class Vendor extends Base
     }
 
     /**
-     * @return Collection<int, Order>
+     * @return Collection<int, VendorOrder>
      */
-    public function getOrders(): Collection
+    public function getVendorOrders(): Collection
     {
-        return $this->orders;
+        return $this->vendorOrders;
     }
 
-    public function addOrder(Order $order): self
+    public function addVendorOrder(VendorOrder $vendorOrder): static
     {
-        if (!$this->orders->contains($order)) {
-            $this->orders->add($order);
-            $order->setVendor($this);
+        if (!$this->vendorOrders->contains($vendorOrder)) {
+            $this->vendorOrders->add($vendorOrder);
+            $vendorOrder->setVendor($this);
         }
 
         return $this;
     }
 
-    public function removeOrder(Order $order): self
+    public function removeVendorOrder(VendorOrder $vendorOrder): static
     {
-        if ($this->orders->removeElement($order)) {
+        if ($this->vendorOrders->removeElement($vendorOrder)) {
             // set the owning side to null (unless already changed)
-            if ($order->getVendor() === $this) {
-                $order->setVendor(null);
+            if ($vendorOrder->getVendor() === $this) {
+                $vendorOrder->setVendor(null);
             }
         }
 

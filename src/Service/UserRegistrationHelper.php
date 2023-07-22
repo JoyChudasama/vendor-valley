@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Entity\User;
-use DateTime;
+use App\Entity\UserCustomer;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserRegistrationHelper
@@ -12,25 +12,24 @@ class UserRegistrationHelper
     {
     }
 
-    public function setUpUser(User $user)
+    public function setUpUser(User $user): void
     {
         $this->setUpPassword($user);
-        $this->setUpUsername($user);
-
-        $user->setCreatedAt(new DateTime());
-        $user->setUpdatedAt(new DateTime());
+        $this->createUserCustomer($user);
     }
 
-    private function setUpPassword(User $user)
+    private function setUpPassword(User $user): void
     {
         $passoword = $user->getPassword();
         $hashedPassword = $this->passwordHasher->hashPassword($user, $passoword);
         $user->setPassword($hashedPassword);
     }
 
-    private function setUpUsername(User $user)
+    private function createUserCustomer(User $user): void
     {
-        $userName = "{$user->getFirstName()}_{$user->getLastName()} ";
-        $user->setUserName($userName);
+        $userCustomer = new UserCustomer();
+        $userCustomer->setUser($user);
+
+        $user->setUserCustomer($userCustomer);
     }
 }

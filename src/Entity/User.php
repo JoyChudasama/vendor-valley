@@ -10,9 +10,10 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User extends Base implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     const ROLE_ADMIN = 'ROLE_ADMIN';
+    const ROLE_VENDOR = 'ROLE_VENDOR';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -31,14 +32,17 @@ class User extends Base implements UserInterface, PasswordAuthenticatedUserInter
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255)]
     private ?string $firstName = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255)]
     private ?string $lastName = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $userName = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $address = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $postalCode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $city = null;
@@ -46,32 +50,21 @@ class User extends Base implements UserInterface, PasswordAuthenticatedUserInter
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $province = null;
 
-    public ?string $confirmEmail = null;
-
-    public ?string $confirmPassword = null;
-
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class, cascade: ['remove'])]
-    private Collection $orders;
-
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Vendor::class, cascade: ['persist', 'remove'])]
-    private Collection $vendors;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $phoneNumber = null;
 
     #[ORM\Column(nullable: true)]
-    private ?bool $becomeVendor = null;
+    private ?bool $becomeVendor = false;
 
-    #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Cart::class)]
-    private Collection $carts;
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Vendor $vendor = null;
 
-    public function __construct()
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist','remove'])]
+    private ?UserCustomer $userCustomer = null;
+
+    public function __toString(): string
     {
-        $this->orders = new ArrayCollection();
-        $this->vendors = new ArrayCollection();
-        $this->carts = new ArrayCollection();
-    }
-
-    public function __toString()
-    {
-        return $this->userName;
+        return $this->firstName;
     }
 
     public function getId(): ?int
@@ -149,7 +142,7 @@ class User extends Base implements UserInterface, PasswordAuthenticatedUserInter
         return $this->firstName;
     }
 
-    public function setFirstName(string $firstName): self
+    public function setFirstName(string $firstName): static
     {
         $this->firstName = $firstName;
 
@@ -161,21 +154,33 @@ class User extends Base implements UserInterface, PasswordAuthenticatedUserInter
         return $this->lastName;
     }
 
-    public function setLastName(string $lastName): self
+    public function setLastName(string $lastName): static
     {
         $this->lastName = $lastName;
 
         return $this;
     }
 
-    public function getUserName(): ?string
+    public function getAddress(): ?string
     {
-        return $this->userName;
+        return $this->address;
     }
 
-    public function setUserName(string $userName): self
+    public function setAddress(?string $address): static
     {
-        $this->userName = $userName;
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    public function setPostalCode(?string $postalCode): static
+    {
+        $this->postalCode = $postalCode;
 
         return $this;
     }
@@ -185,7 +190,7 @@ class User extends Base implements UserInterface, PasswordAuthenticatedUserInter
         return $this->city;
     }
 
-    public function setCity(?string $city): self
+    public function setCity(?string $city): static
     {
         $this->city = $city;
 
@@ -197,75 +202,21 @@ class User extends Base implements UserInterface, PasswordAuthenticatedUserInter
         return $this->province;
     }
 
-    public function setProvince(?string $province): self
+    public function setProvince(?string $province): static
     {
         $this->province = $province;
 
         return $this;
     }
 
-
-    /**
-     * @return Collection<int, Order>
-     */
-    public function getOrders(): Collection
+    public function getPhoneNumber(): ?string
     {
-        return $this->orders;
+        return $this->phoneNumber;
     }
 
-    public function addOrder(Order $order): self
+    public function setPhoneNumber(?string $phoneNumber): static
     {
-        if (!$this->orders->contains($order)) {
-            $this->orders->add($order);
-            $order->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrder(Order $order): self
-    {
-        if ($this->orders->removeElement($order)) {
-            // set the owning side to null (unless already changed)
-            if ($order->getUser() === $this) {
-                $order->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Vendor>
-     */
-    public function getVendors(): Collection
-    {
-        return $this->vendors;
-    }
-
-    public function getVendor(): ?Vendor
-    {
-        return $this->getVendors()[0];
-    }
-
-    public function addVendor(Vendor $vendor): self
-    {
-        if (!$this->vendors->contains($vendor)) {
-            $this->vendors->add($vendor);
-            $vendor->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeVendor(Vendor $vendor): self
-    {
-        if ($this->vendors->removeElement($vendor)) {
-            // set the owning side to null (unless already changed)
-            if ($vendor->getUser() === $this) {
-                $vendor->setUser(null);
-            }
-        }
+        $this->phoneNumber = $phoneNumber;
 
         return $this;
     }
@@ -275,39 +226,43 @@ class User extends Base implements UserInterface, PasswordAuthenticatedUserInter
         return $this->becomeVendor;
     }
 
-    public function setBecomeVendor(?bool $becomeVendor): self
+    public function setBecomeVendor(?bool $becomeVendor): static
     {
         $this->becomeVendor = $becomeVendor;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Cart>
-     */
-    public function getCarts(): Collection
+    public function getVendor(): ?Vendor
     {
-        return $this->carts;
+        return $this->vendor;
     }
 
-    public function addCart(Cart $cart): self
+    public function setVendor(Vendor $vendor): static
     {
-        if (!$this->carts->contains($cart)) {
-            $this->carts->add($cart);
-            $cart->setCustomer($this);
+        // set the owning side of the relation if necessary
+        if ($vendor->getUser() !== $this) {
+            $vendor->setUser($this);
         }
+
+        $this->vendor = $vendor;
 
         return $this;
     }
 
-    public function removeCart(Cart $cart): self
+    public function getUserCustomer(): ?UserCustomer
     {
-        if ($this->carts->removeElement($cart)) {
-            // set the owning side to null (unless already changed)
-            if ($cart->getCustomer() === $this) {
-                $cart->setCustomer(null);
-            }
+        return $this->userCustomer;
+    }
+
+    public function setUserCustomer(UserCustomer $userCustomer): static
+    {
+        // set the owning side of the relation if necessary
+        if ($userCustomer->getUser() !== $this) {
+            $userCustomer->setUser($this);
         }
+
+        $this->userCustomer = $userCustomer;
 
         return $this;
     }

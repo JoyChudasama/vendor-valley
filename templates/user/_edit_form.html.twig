@@ -34,13 +34,13 @@
 		</div>
 	</div>
 
-	{% if form.becomeVendor is defined %}
+	{# {% if form.becomeVendor is defined %}
 		<div class="row">
 			<div class="col-sm-12 col-md-12 col-lg-6 d-flex align-items-center">
 				{{form_row(form.becomeVendor)}}
 			</div>
 		</div>
-	{% endif %}
+	{% endif %} #}
 
 	<div class="row button-container pt-3" {{stimulus_controller('loading-spinner')}}>
 		<div class="col-sm-12 col-md-2" data-loading-spinner-target="submitButtonDiv">

@@ -19,7 +19,7 @@ class CartHelper extends AbstractController
         if ($cart) return $cart;
 
         $cart = new Cart();
-        $cart->setCustomer($this->security->getUser());
+        $cart->setUserCustomer($this->security->getUser()->getUserCustomer());
         $cart->setTotalAmount(0);
 
         $session->set('cart', $cart);

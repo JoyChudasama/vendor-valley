@@ -2,27 +2,27 @@
 
 namespace App\Repository;
 
-use App\Entity\Vendor;
+use App\Entity\VendorOrder;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Vendor>
+ * @extends ServiceEntityRepository<VendorOrder>
  *
- * @method Vendor|null find($id, $lockMode = null, $lockVersion = null)
- * @method Vendor|null findOneBy(array $criteria, array $orderBy = null)
- * @method Vendor[]    findAll()
- * @method Vendor[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method VendorOrder|null find($id, $lockMode = null, $lockVersion = null)
+ * @method VendorOrder|null findOneBy(array $criteria, array $orderBy = null)
+ * @method VendorOrder[]    findAll()
+ * @method VendorOrder[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class VendorRepository extends ServiceEntityRepository
+class VendorOrderRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Vendor::class);
+        parent::__construct($registry, VendorOrder::class);
     }
 
 //    /**
-//     * @return Vendor[] Returns an array of Vendor objects
+//     * @return VendorOrder[] Returns an array of VendorOrder objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -36,7 +36,7 @@ class VendorRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Vendor
+//    public function findOneBySomeField($value): ?VendorOrder
 //    {
 //        return $this->createQueryBuilder('v')
 //            ->andWhere('v.exampleField = :val')

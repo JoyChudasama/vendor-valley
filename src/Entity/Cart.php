@@ -5,10 +5,11 @@ namespace App\Entity;
 use App\Repository\CartRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CartRepository::class)]
-class Cart extends Base
+class Cart
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -16,14 +17,13 @@ class Cart extends Base
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'carts')]
-    private ?User $customer = null;
+    private ?UserCustomer $userCustomer = null;
 
-    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: CartItem::class, cascade:['persist','remove'])]
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: '0')]
+    private ?string $totalAmount = null;
+
+    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: CartItem::class)]
     private Collection $cartItems;
-
-    #[ORM\Column]
-    private ?float $totalAmount = null;
-
 
     public function __construct()
     {
@@ -35,14 +35,26 @@ class Cart extends Base
         return $this->id;
     }
 
-    public function getCustomer(): ?User
+    public function getUserCustomer(): ?UserCustomer
     {
-        return $this->customer;
+        return $this->userCustomer;
     }
 
-    public function setCustomer(?User $customer): self
+    public function setUserCustomer(?UserCustomer $userCustomer): static
     {
-        $this->customer = $customer;
+        $this->userCustomer = $userCustomer;
+
+        return $this;
+    }
+
+    public function getTotalAmount(): ?string
+    {
+        return $this->totalAmount;
+    }
+
+    public function setTotalAmount(string $totalAmount): static
+    {
+        $this->totalAmount = $totalAmount;
 
         return $this;
     }
@@ -55,41 +67,25 @@ class Cart extends Base
         return $this->cartItems;
     }
 
-    public function addCartItem(CartItem $cartItem): self
+    public function addCartItem(CartItem $cartItem): static
     {
         if (!$this->cartItems->contains($cartItem)) {
             $this->cartItems->add($cartItem);
             $cartItem->setCart($this);
-
         }
 
         return $this;
     }
 
-    public function removeCartItem(CartItem $cartItem): self
+    public function removeCartItem(CartItem $cartItem): static
     {
         if ($this->cartItems->removeElement($cartItem)) {
             // set the owning side to null (unless already changed)
             if ($cartItem->getCart() === $this) {
                 $cartItem->setCart(null);
-
             }
         }
 
         return $this;
     }
-
-    public function getTotalAmount(): ?float
-    {
-        return $this->totalAmount;
-    }
-
-    public function setTotalAmount(float $totalAmount): self
-    {
-        $this->totalAmount = $totalAmount;
-
-        return $this;
-    }
-
-   
 }

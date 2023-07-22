@@ -19,6 +19,7 @@ class UserVendorHelper
         $vendor->setName("{$user->getFirstName()}'s Business");
         $vendor->setUser($user);
 
-        $user->addVendor($vendor);
+        $user->setVendor($vendor);
+        $user->setRoles([User::ROLE_VENDOR]);
     }
 }

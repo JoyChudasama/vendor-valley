@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Entity\Vendor;
 use App\Form\VendorType;
 use App\Repository\VendorRepository;

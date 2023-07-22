@@ -3,14 +3,12 @@
 namespace App\Command;
 
 use App\Entity\User;
+use App\Entity\UserCustomer;
 use App\Entity\Vendor;
-use App\Repository\UserRepository;
-use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -26,8 +24,10 @@ class Create10UsersWithVendorCommand extends Command
         $this;
     }
 
-    public function __construct(private UserPasswordHasherInterface $passwordHasher, private UserRepository $userRepository)
-    {
+    public function __construct(
+        private UserPasswordHasherInterface $passwordHasher,
+        private EntityManagerInterface $entityManagerInterface
+    ) {
         parent::__construct();
     }
 
@@ -86,38 +86,52 @@ class Create10UsersWithVendorCommand extends Command
                 'lastName' => 'fake',
             ],
         ];
-        $passowrd = 'password';
+        $passowrd = 'vv';
 
         foreach ($users as  $user) {
             $userEntity = new User();
             $userEntity->setFirstName($user['firstName']);
             $userEntity->setLastName($user['lastName']);
-            $userEntity->setUserName($user['firstName']  . '_' . $user['lastName']);
             $userEntity->setEmail($user['email']);
-            $userEntity->setCreatedAt(new DateTime());
-            $userEntity->setUpdatedAt(new DateTime());
-            $userEntity->setCreatedBy('ADMIN');
             $userEntity->setBecomeVendor(true);
+            $userEntity->setRoles([User::ROLE_VENDOR]);
 
             $hashedPassword = $this->passwordHasher->hashPassword($userEntity, $passowrd);
             $userEntity->setPassword($hashedPassword);
 
+            $this->createUserCustomer($userEntity);
             $this->createVendor($userEntity);
-            $this->userRepository->save($userEntity, true);
+
+            $this->entityManagerInterface->persist($userEntity);
         }
 
-        $io->success('Users & Vendors created successfully!!!');
+        $this->entityManagerInterface->flush();
 
+        $io->success('Users & Vendors created successfully!!!');
 
         return Command::SUCCESS;
     }
 
-    private function createVendor(User $user){
+    private function createUserCustomer(User $user): void
+    {
+        $userCustomer = new UserCustomer();
+        $userCustomer->setUser($user);
+
+        $user->setUserCustomer($userCustomer);
+    }
+
+    private function createVendor(User $user): void
+    {
         $vendor = new Vendor();
         $vendor->setUser($user);
         $vendor->setName("{$user->getFirstName()}'s Business");
-        $vendor->setDescription('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.');
+        $vendor->setEmail($user->getEmail());
+        $vendor->setPhoneNumber('1234567890');
+        $vendor->setAddress('15 Yemen Road');
+        $vendor->setPostalCode('K2YU3H');
+        $vendor->setCity('Yemen');
+        $vendor->setProvince('Yemen');
 
-        $user->addVendor($vendor);
+        $user->setVendor($vendor);
     }
 }

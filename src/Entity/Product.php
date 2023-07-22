@@ -9,7 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
-class Product extends Base
+class Product
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -22,47 +22,43 @@ class Product extends Base
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $price = null;
+    #[ORM\Column]
+    private ?int $availableUnits = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $isAvailable = true;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $isListed = false;
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: '0')]
+    private ?string $price = null;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductImage::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductImage::class, orphanRemoval: true)]
     private Collection $productImages;
 
-    public $tempProductImages;
-
-    #[ORM\ManyToOne(inversedBy: 'products')]
-    private ?Order $orderr = null;
+    #[ORM\Column]
+    private ?bool $isListed = true;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Vendor $vendor = null;
 
-    #[ORM\ManyToOne(inversedBy: 'products')]
-    private ?Cart $cart = null;
+    #[ORM\ManyToMany(targetEntity: VendorOrder::class, mappedBy: 'products')]
+    private Collection $vendorOrders;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: CartItem::class)]
     private Collection $cartItems;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $quantity = null;
-
     public function __construct()
     {
         $this->productImages = new ArrayCollection();
+        $this->vendorOrders = new ArrayCollection();
         $this->cartItems = new ArrayCollection();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->name;
     }
-
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -73,7 +69,7 @@ class Product extends Base
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(string $name): static
     {
         $this->name = $name;
 
@@ -85,21 +81,21 @@ class Product extends Base
         return $this->description;
     }
 
-    public function setDescription(?string $description): self
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function getPrice(): ?int
+    public function getAvailableUnits(): ?int
     {
-        return $this->price;
+        return $this->availableUnits;
     }
 
-    public function setPrice(?int $price): self
+    public function setAvailableUnits(int $availableUnits): static
     {
-        $this->price = $price;
+        $this->availableUnits = $availableUnits;
 
         return $this;
     }
@@ -109,21 +105,21 @@ class Product extends Base
         return $this->isAvailable;
     }
 
-    public function setIsAvailable(?bool $isAvailable): self
+    public function setIsAvailable(?bool $isAvailable): static
     {
         $this->isAvailable = $isAvailable;
 
         return $this;
     }
 
-    public function isIsListed(): ?bool
+    public function getPrice(): ?string
     {
-        return $this->isListed;
+        return $this->price;
     }
 
-    public function setIsListed(?bool $isListed): self
+    public function setPrice(string $price): static
     {
-        $this->isListed = $isListed;
+        $this->price = $price;
 
         return $this;
     }
@@ -136,7 +132,7 @@ class Product extends Base
         return $this->productImages;
     }
 
-    public function addProductImage(ProductImage $productImage): self
+    public function addProductImage(ProductImage $productImage): static
     {
         if (!$this->productImages->contains($productImage)) {
             $this->productImages->add($productImage);
@@ -146,7 +142,7 @@ class Product extends Base
         return $this;
     }
 
-    public function removeProductImage(ProductImage $productImage): self
+    public function removeProductImage(ProductImage $productImage): static
     {
         if ($this->productImages->removeElement($productImage)) {
             // set the owning side to null (unless already changed)
@@ -158,14 +154,14 @@ class Product extends Base
         return $this;
     }
 
-    public function getOrderr(): ?Order
+    public function isIsListed(): ?bool
     {
-        return $this->orderr;
+        return $this->isListed;
     }
 
-    public function setOrderr(?Order $orderr): self
+    public function setIsListed(bool $isListed): static
     {
-        $this->orderr = $orderr;
+        $this->isListed = $isListed;
 
         return $this;
     }
@@ -175,21 +171,36 @@ class Product extends Base
         return $this->vendor;
     }
 
-    public function setVendor(?Vendor $vendor): self
+    public function setVendor(?Vendor $vendor): static
     {
         $this->vendor = $vendor;
 
         return $this;
     }
 
-    public function getCart(): ?Cart
+    /**
+     * @return Collection<int, VendorOrder>
+     */
+    public function getVendorOrders(): Collection
     {
-        return $this->cart;
+        return $this->vendorOrders;
     }
 
-    public function setCart(?Cart $cart): self
+    public function addVendorOrder(VendorOrder $vendorOrder): static
     {
-        $this->cart = $cart;
+        if (!$this->vendorOrders->contains($vendorOrder)) {
+            $this->vendorOrders->add($vendorOrder);
+            $vendorOrder->addProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVendorOrder(VendorOrder $vendorOrder): static
+    {
+        if ($this->vendorOrders->removeElement($vendorOrder)) {
+            $vendorOrder->removeProduct($this);
+        }
 
         return $this;
     }
@@ -202,7 +213,7 @@ class Product extends Base
         return $this->cartItems;
     }
 
-    public function addCartItem(CartItem $cartItem): self
+    public function addCartItem(CartItem $cartItem): static
     {
         if (!$this->cartItems->contains($cartItem)) {
             $this->cartItems->add($cartItem);
@@ -212,7 +223,7 @@ class Product extends Base
         return $this;
     }
 
-    public function removeCartItem(CartItem $cartItem): self
+    public function removeCartItem(CartItem $cartItem): static
     {
         if ($this->cartItems->removeElement($cartItem)) {
             // set the owning side to null (unless already changed)
@@ -220,18 +231,6 @@ class Product extends Base
                 $cartItem->setProduct(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getQuantity(): ?int
-    {
-        return $this->quantity;
-    }
-
-    public function setQuantity(?int $quantity): self
-    {
-        $this->quantity = $quantity;
 
         return $this;
     }
