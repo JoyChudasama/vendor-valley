@@ -4,8 +4,6 @@ namespace App\Service;
 
 use App\Entity\CartItem;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\BrowserKit\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 

@@ -4,7 +4,6 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Entity\UserCustomer;
-use DateTime;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserRegistrationHelper

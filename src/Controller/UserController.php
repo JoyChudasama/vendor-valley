@@ -7,12 +7,10 @@ use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Service\UserRegistrationHelper;
 use App\Service\UserVendorHelper;
-use DateTime;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/user')]

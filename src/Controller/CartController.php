@@ -20,7 +20,7 @@ class CartController extends AbstractController
     {
         $session = $request->getSession();
 
-        $cart = $session->get('cart', []);
+        $cart = $session->get('cart');
 
         $cartItems = empty($cart) ? 0 : count($cart->getCartItems());
 

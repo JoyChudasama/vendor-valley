@@ -44,10 +44,14 @@ class Product
     #[ORM\ManyToMany(targetEntity: VendorOrder::class, mappedBy: 'products')]
     private Collection $vendorOrders;
 
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: CartItem::class)]
+    private Collection $cartItems;
+
     public function __construct()
     {
         $this->productImages = new ArrayCollection();
         $this->vendorOrders = new ArrayCollection();
+        $this->cartItems = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -196,6 +200,36 @@ class Product
     {
         if ($this->vendorOrders->removeElement($vendorOrder)) {
             $vendorOrder->removeProduct($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CartItem>
+     */
+    public function getCartItems(): Collection
+    {
+        return $this->cartItems;
+    }
+
+    public function addCartItem(CartItem $cartItem): static
+    {
+        if (!$this->cartItems->contains($cartItem)) {
+            $this->cartItems->add($cartItem);
+            $cartItem->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCartItem(CartItem $cartItem): static
+    {
+        if ($this->cartItems->removeElement($cartItem)) {
+            // set the owning side to null (unless already changed)
+            if ($cartItem->getProduct() === $this) {
+                $cartItem->setProduct(null);
+            }
         }
 
         return $this;
