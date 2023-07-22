@@ -20,5 +20,6 @@ class UserVendorHelper
         $vendor->setUser($user);
 
         $user->setVendor($vendor);
+        $user->setRoles([User::ROLE_VENDOR]);
     }
 }
