@@ -13,10 +13,6 @@ class OrderItem
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Product $product = null;
-
     #[ORM\Column]
     private ?int $quantity = 1;
 
@@ -24,21 +20,12 @@ class OrderItem
     #[ORM\JoinColumn(nullable: false)]
     private ?Order $relatedOrder = null;
 
+    #[ORM\ManyToOne(inversedBy: 'orderItems',cascade:['persist','remove'])]
+    private ?Product $product = null;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getProduct(): ?Product
-    {
-        return $this->product;
-    }
-
-    public function setProduct(Product $product): static
-    {
-        $this->product = $product;
-
-        return $this;
     }
 
     public function getQuantity(): ?int
@@ -61,6 +48,18 @@ class OrderItem
     public function setRelatedOrder(?Order $relatedOrder): static
     {
         $this->relatedOrder = $relatedOrder;
+
+        return $this;
+    }
+
+    public function getProduct(): ?Product
+    {
+        return $this->product;
+    }
+
+    public function setProduct(?Product $product): static
+    {
+        $this->product = $product;
 
         return $this;
     }

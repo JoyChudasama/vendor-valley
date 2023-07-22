@@ -17,14 +17,14 @@ class Order
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'orders')]
+    #[ORM\ManyToOne(inversedBy: 'orders', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?UserCustomer $userCustomer = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: '0')]
     private ?string $totalAmount = null;
 
-    #[ORM\OneToMany(mappedBy: 'relatedOrder', targetEntity: OrderItem::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'relatedOrder', targetEntity: OrderItem::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
     private Collection $orderItems;
 
     public function __construct()

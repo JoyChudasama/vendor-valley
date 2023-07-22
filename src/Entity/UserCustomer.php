@@ -15,10 +15,10 @@ class UserCustomer
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToMany(mappedBy: 'userCustomer', targetEntity: Order::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'userCustomer', targetEntity: Order::class, orphanRemoval: true, cascade:['remove'])]
     private Collection $orders;
 
-    #[ORM\OneToOne(inversedBy: 'userCustomer')]
+    #[ORM\OneToOne(inversedBy: 'userCustomer',cascade:['persist','remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 

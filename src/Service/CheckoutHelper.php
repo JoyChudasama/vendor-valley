@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\CartItem;
+use Stripe\Checkout\Session as CheckoutSession;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -16,7 +17,7 @@ class CheckoutHelper
     ) {
     }
 
-    public function getCheckoutSession(Session $session)
+    public function getCheckoutSession(Session $session): CheckoutSession
     {
         $stripe = new \Stripe\StripeClient($this->stripeApiKey);
 

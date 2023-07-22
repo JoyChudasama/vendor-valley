@@ -30,6 +30,5 @@ class CartHelper extends AbstractController
     public function clearCart(Session $session)
     {
         $session->remove('cart');
-        $session->remove('cart_items');
     }
 }
