@@ -33,10 +33,10 @@ class UserType extends AbstractType
                 'required' => true
             ])
             ->add('city', TextType::class, [
-                'required' => false
+                'required' => true
             ])
             ->add('province', TextType::class, [
-                'required' => false
+                'required' => true
             ]);
 
         if ($user->getId() !== null && ($user->getBecomeVendor() === null || $user->getBecomeVendor() === false)) {

@@ -4,13 +4,11 @@ namespace App\Command;
 
 use App\Entity\User;
 use App\Entity\UserCustomer;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -48,15 +46,14 @@ class CreateAdminUserCommand extends Command
         $hashedPassword = $this->passwordHasher->hashPassword($user, $password);
 
         $user->setPassword($hashedPassword);
-        $user->setRoles(['ROLE_ADMIN']);
+        $user->setRoles([User::ROLE_ADMIN]);
         $user->setFirstName('Joy');
         $user->setLastName('Chudasama');
         
         $userCustomer = new UserCustomer();
         $userCustomer->setUser($user);
-        
         $user->setUserCustomer($userCustomer);
-        
+
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 

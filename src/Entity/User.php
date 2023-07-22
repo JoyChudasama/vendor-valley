@@ -59,10 +59,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Vendor $vendor = null;
 
-    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist','remove'])]
     private ?UserCustomer $userCustomer = null;
-    
+
     public function __toString(): string
     {
         return $this->firstName;
@@ -258,6 +257,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setUserCustomer(UserCustomer $userCustomer): static
     {
+        // set the owning side of the relation if necessary
+        if ($userCustomer->getUser() !== $this) {
+            $userCustomer->setUser($this);
+        }
+
         $this->userCustomer = $userCustomer;
 
         return $this;

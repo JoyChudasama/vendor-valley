@@ -18,7 +18,8 @@ class UserCustomer
     #[ORM\OneToMany(mappedBy: 'userCustomer', targetEntity: Order::class, orphanRemoval: true)]
     private Collection $orders;
 
-    #[ORM\OneToOne(mappedBy: 'userCustomer', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'userCustomer')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
     public function __construct()
@@ -68,11 +69,6 @@ class UserCustomer
 
     public function setUser(User $user): static
     {
-        // set the owning side of the relation if necessary
-        if ($user->getUserCustomer() !== $this) {
-            $user->setUserCustomer($this);
-        }
-
         $this->user = $user;
 
         return $this;
