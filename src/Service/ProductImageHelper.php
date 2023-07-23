@@ -22,7 +22,6 @@ class ProductImageHelper extends AbstractController
     {
         if (!$uploadedProductImages) return;
 
-
         foreach ($uploadedProductImages as $img) {
             try {
                 $extension = explode('.', $img->getClientOriginalName())[1];

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Service\CheckoutHelper;
 use App\Service\EmailHelper;
 use App\Service\OrderHelper;
+use App\Service\VendorOrderHelper;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,35 +21,41 @@ class CheckoutController extends AbstractController
         $session = $request->getSession();
 
         try {
-            $checkout_session = $checkoutHelper->getCheckoutSession($session);
+            $checkoutSession = $checkoutHelper->getCheckoutSession($session);
         } catch (Exception $e) {
             $this->addFlash('error', 'Something went wrong. Could not process the payment. Please try again.');
             return $this->redirectToRoute('app_cart_show');
         }
 
-        return $this->redirect($checkout_session->url, 303);
+        return $this->redirect($checkoutSession->url);
     }
 
     #[Route('/checkout-success', name: 'app_checkout_success')]
-    public function checkoutSuccess(Request $request, OrderHelper $orderHelper, EmailHelper $emailHelper): Response
+    public function checkoutSuccess(Request $request, OrderHelper $orderHelper, EmailHelper $emailHelper, VendorOrderHelper $vendorOrderHelper): Response
     {
         $session = $request->getSession();
         $user = $this->getUser();
 
-        $order = $orderHelper->createOrder($session);
-        $emailHelper->sendOrderPlacedEmail($order);
+        try {
+            $order = $orderHelper->createOrder($session);
+            $vendorOrderHelper->createVendorOrder($order);
+            $emailHelper->sendOrderPlacedEmail($order);
+        } catch (Exception $e) {
+            $this->addFlash('error', $e);
+            return $this->redirect('app_cart_show');
+        }
 
         $session->remove('cart');
 
         $this->addFlash('success', 'Order placed successfully. You will recieve an order confirmation email shortly. Thank you for shopping with us.');
 
-        return $this->redirectToRoute('app_order_index', ['id' => $user->getId()], 303);
+        return $this->redirectToRoute('app_order_index', ['id' => $user->getId()]);
     }
 
     #[Route('/checkout-failed', name: 'app_checkout_failed')]
     public function checkoutFailed(): Response
     {
         $this->addFlash('error', 'Something went wrong. Could not process the payment. Please try again.');
-        return $this->redirectToRoute('app_cart_show', [], 303);
+        return $this->redirectToRoute('app_cart_show', []);
     }
 }
