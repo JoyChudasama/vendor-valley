@@ -40,10 +40,10 @@ class Vendor extends Base
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\OneToMany(mappedBy: 'vendor', targetEntity: Product::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'vendor', targetEntity: Product::class, orphanRemoval: true, cascade: ['remove'])]
     private Collection $products;
 
-    #[ORM\OneToMany(mappedBy: 'vendor', targetEntity: VendorOrder::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'vendor', targetEntity: VendorOrder::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
     private Collection $vendorOrders;
 
     public function __construct()

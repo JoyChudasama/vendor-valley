@@ -41,21 +41,21 @@ class Product extends Base
     #[ORM\JoinColumn(nullable: false)]
     private ?Vendor $vendor = null;
 
-    #[ORM\ManyToMany(targetEntity: VendorOrder::class, mappedBy: 'products')]
-    private Collection $vendorOrders;
-
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: CartItem::class)]
     private Collection $cartItems;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: OrderItem::class, cascade:['remove'])]
     private Collection $orderItems;
 
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: VendorOrderItem::class)]
+    private Collection $vendorOrderItems;
+
     public function __construct()
     {
         $this->productImages = new ArrayCollection();
-        $this->vendorOrders = new ArrayCollection();
         $this->cartItems = new ArrayCollection();
         $this->orderItems = new ArrayCollection();
+        $this->vendorOrderItems = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -183,33 +183,6 @@ class Product extends Base
     }
 
     /**
-     * @return Collection<int, VendorOrder>
-     */
-    public function getVendorOrders(): Collection
-    {
-        return $this->vendorOrders;
-    }
-
-    public function addVendorOrder(VendorOrder $vendorOrder): static
-    {
-        if (!$this->vendorOrders->contains($vendorOrder)) {
-            $this->vendorOrders->add($vendorOrder);
-            $vendorOrder->addProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeVendorOrder(VendorOrder $vendorOrder): static
-    {
-        if ($this->vendorOrders->removeElement($vendorOrder)) {
-            $vendorOrder->removeProduct($this);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, CartItem>
      */
     public function getCartItems(): Collection
@@ -263,6 +236,36 @@ class Product extends Base
             // set the owning side to null (unless already changed)
             if ($orderItem->getProduct() === $this) {
                 $orderItem->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, VendorOrderItem>
+     */
+    public function getVendorOrderItems(): Collection
+    {
+        return $this->vendorOrderItems;
+    }
+
+    public function addVendorOrderItem(VendorOrderItem $vendorOrderItem): static
+    {
+        if (!$this->vendorOrderItems->contains($vendorOrderItem)) {
+            $this->vendorOrderItems->add($vendorOrderItem);
+            $vendorOrderItem->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVendorOrderItem(VendorOrderItem $vendorOrderItem): static
+    {
+        if ($this->vendorOrderItems->removeElement($vendorOrderItem)) {
+            // set the owning side to null (unless already changed)
+            if ($vendorOrderItem->getProduct() === $this) {
+                $vendorOrderItem->setProduct(null);
             }
         }
 

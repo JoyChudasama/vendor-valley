@@ -14,9 +14,9 @@
 		{% endif %}
 
 		{% if is_granted('ROLE_VENDOR') %}
-			{% if vendor %}
+			{% if user.vendor %}
 				<li class="p-2">
-					<a href="{{path('app_vendor_profile',{'id':vendor.id})}}">{{vendor}}</a>
+					<a href="{{path('app_vendor_profile',{'id':user.vendor.id})}}">{{user.vendor}}</a>
 				</li>
 			{% endif %}
 		{% endif %}

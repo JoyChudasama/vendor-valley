@@ -29,6 +29,7 @@ class OrderHelper
         $order->setUser($user);
         $order->setTotalAmount($cart->getTotalAmount());
         $order->setOrderNumber($this->createOrderNumber());
+        
         foreach ($cartItems as $cartItem) {
             $orderItem = $this->createOrderItem($cartItem, $order);
             $order->addOrderItem($orderItem);

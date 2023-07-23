@@ -16,10 +16,10 @@ class VendorType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'required' => true
-            ])
-            ->add('description', TextareaType::class, [
-                'required' => false
             ]);
+            // ->add('description', TextareaType::class, [
+            //     'required' => false
+            // ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

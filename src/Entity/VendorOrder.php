@@ -19,12 +19,12 @@ class VendorOrder extends Base
     #[ORM\JoinColumn(nullable: false)]
     private ?Vendor $vendor = null;
 
-    #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'vendorOrders')]
-    private Collection $products;
+    #[ORM\OneToMany(mappedBy: 'vendorOrder', targetEntity: VendorOrderItem::class, cascade: ['persist', 'remove'])]
+    private Collection $vendorOrderItems;
 
     public function __construct()
     {
-        $this->products = new ArrayCollection();
+        $this->vendorOrderItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -45,25 +45,31 @@ class VendorOrder extends Base
     }
 
     /**
-     * @return Collection<int, Product>
+     * @return Collection<int, VendorOrderItem>
      */
-    public function getProducts(): Collection
+    public function getVendorOrderItems(): Collection
     {
-        return $this->products;
+        return $this->vendorOrderItems;
     }
 
-    public function addProduct(Product $product): static
+    public function addVendorOrderItem(VendorOrderItem $vendorOrderItem): static
     {
-        if (!$this->products->contains($product)) {
-            $this->products->add($product);
+        if (!$this->vendorOrderItems->contains($vendorOrderItem)) {
+            $this->vendorOrderItems->add($vendorOrderItem);
+            $vendorOrderItem->setVendorOrder($this);
         }
 
         return $this;
     }
 
-    public function removeProduct(Product $product): static
+    public function removeVendorOrderItem(VendorOrderItem $vendorOrderItem): static
     {
-        $this->products->removeElement($product);
+        if ($this->vendorOrderItems->removeElement($vendorOrderItem)) {
+            // set the owning side to null (unless already changed)
+            if ($vendorOrderItem->getVendorOrder() === $this) {
+                $vendorOrderItem->setVendorOrder(null);
+            }
+        }
 
         return $this;
     }

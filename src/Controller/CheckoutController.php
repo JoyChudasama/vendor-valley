@@ -38,7 +38,7 @@ class CheckoutController extends AbstractController
 
         try {
             $order = $orderHelper->createOrder($session);
-            $vendorOrderHelper->createVendorOrder($order);
+            $vendorOrderHelper->createVendorOrders($order);
             $emailHelper->sendOrderPlacedEmail($order);
         } catch (Exception $e) {
             $this->addFlash('error', $e);
