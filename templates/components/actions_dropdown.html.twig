@@ -2,13 +2,22 @@
 	<i class="fa-solid fa-ellipsis" data-bs-toggle="dropdown" aria-expanded="false"></i>
 
 	<ul class="dropdown-menu">
-		<li class="">
-			<a class="dropdown-item edit" href="{{editLink}}">Edit</a>
-		</li>
-		<li class="">
-			<a class="dropdown-item delete" href="#">
-				{{include(deleteFormPath)}}
-			</a>
-		</li>
+		{% if viewLink is defined %}
+			<li class="">
+				<a class="dropdown-item view" href="{{viewLink}}">View</a>
+			</li>
+		{% endif %}
+		{% if editLink is defined %}
+			<li class="">
+				<a class="dropdown-item edit" href="{{editLink}}">Edit</a>
+			</li>
+		{% endif %}
+		{% if deleteFormPath is defined %}
+			<li class="">
+				<a class="dropdown-item delete" href="#">
+					{{include(deleteFormPath)}}
+				</a>
+			</li>
+		{% endif %}
 	</ul>
 </div>

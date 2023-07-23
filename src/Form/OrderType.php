@@ -13,7 +13,7 @@ class OrderType extends AbstractType
     {
         $builder
             ->add('totalAmount')
-            ->add('userCustomer')
+            ->add('user')
         ;
     }
 

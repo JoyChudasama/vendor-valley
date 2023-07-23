@@ -1,25 +1,7 @@
-<table class="table">
-	<thead>
-		<tr>
-			<th>Number of Products</th>
-			<th>Total Amount</th>
-			<th>Price</th>
-			<th>Actions</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for order in orders %}
-			<tr>
-				<td>{{ order.orderItems|length }}</td>
-				<td>{{ order.totalAmount|currency }}</td>
-				<td>
-					{{include('components/actions_dropdown.html.twig',{editLink:path('app_order_edit', {'id': order.id}), deleteFormPath: "order/_delete_form.html.twig"})}}
-				</td>
-			</tr>
-		{% else %}
-			<tr>
-				<td colspan="7">No Products Found</td>
-			</tr>
-		{% endfor %}
-	</tbody>
-</table>
+{% for order in orders %}
+	{{include('components/order_card.html.twig')}}
+{% else %}
+	<tr>
+		<td colspan="7">No Orders Found</td>
+	</tr>
+{% endfor %}

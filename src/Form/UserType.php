@@ -16,7 +16,7 @@ class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        // $user = $builder->getData();
+        $user = $builder->getData();
 
         $builder
             ->add('email', EmailType::class, [
@@ -46,15 +46,15 @@ class UserType extends AbstractType
         //     ]);
         // }
 
-        // if ($user->getId() === null) {
-        //     $builder->add('password', PasswordType::class, [
-        //         'required' => true
-        //     ])
-        //         ->add('confirmPassword', PasswordType::class, [
-        //             'required' => true,
-        //             'mapped' => false
-        //         ]);
-        // }
+        if ($user->getId() === null) {
+            $builder->add('password', PasswordType::class, [
+                'required' => true
+            ])
+                ->add('confirmPassword', PasswordType::class, [
+                    'required' => true,
+                    'mapped' => false
+                ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void

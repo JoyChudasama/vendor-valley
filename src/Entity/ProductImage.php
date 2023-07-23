@@ -6,7 +6,7 @@ use App\Repository\ProductImageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductImageRepository::class)]
-class ProductImage
+class ProductImage extends Base
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

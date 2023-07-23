@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VendorOrderRepository::class)]
-class VendorOrder
+class VendorOrder extends Base
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

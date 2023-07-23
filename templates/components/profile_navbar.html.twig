@@ -1,27 +1,30 @@
+{% set user = app.user %}
+
 <div class="profile-navbar user-navbar bg-primary text-white rounded mb-5">
 
 	<ul class="d-flex p-3">
-        <li class="p-2">
+		<li class="p-2">
 			<a href="{{path('app_user_profile',{'id':user.id})}}">Profile</a>
 		</li>
 
-        {% if is_granted('ROLE_ADMIN') %}
+		{% if is_granted('ROLE_ADMIN') %}
 			<li class="p-2">
-				<a  href="#">Admin</a>
+				<a href="#">Admin</a>
 			</li>
 		{% endif %}
 
-		{% set vendor = user.getVendor %}
-		{% if vendor %}
-			<li class="p-2">
-				<a href="{{path('app_vendor_profile',{'id':vendor.id})}}">{{vendor}}</a>
-			</li>
+		{% if is_granted('ROLE_VENDOR') %}
+			{% if vendor %}
+				<li class="p-2">
+					<a href="{{path('app_vendor_profile',{'id':vendor.id})}}">{{vendor}}</a>
+				</li>
+			{% endif %}
 		{% endif %}
 
 		<li class="p-2">
-			<a href="#">Orders</a>
+			<a href="{{path('app_order_index',{'id':user.id})}}">Orders</a>
 		</li>
-		
+
 		<li class="p-2">
 			<a href="#">Payment</a>
 		</li>

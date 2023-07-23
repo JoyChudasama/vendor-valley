@@ -10,22 +10,21 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
-class Order
+class Order extends Base
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'orders', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?UserCustomer $userCustomer = null;
-
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: '0')]
     private ?string $totalAmount = null;
 
     #[ORM\OneToMany(mappedBy: 'relatedOrder', targetEntity: OrderItem::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
     private Collection $orderItems;
+
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    private ?User $user = null;
 
     public function __construct()
     {
@@ -35,18 +34,6 @@ class Order
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUserCustomer(): ?UserCustomer
-    {
-        return $this->userCustomer;
-    }
-
-    public function setUserCustomer(?UserCustomer $userCustomer): static
-    {
-        $this->userCustomer = $userCustomer;
-
-        return $this;
     }
 
     public function getTotalAmount(): ?string
@@ -87,6 +74,18 @@ class Order
                 $orderItem->setRelatedOrder(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Order;
-use App\Entity\UserCustomer;
+use App\Entity\User;
 use App\Form\OrderType;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,9 +16,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrderController extends AbstractController
 {
     #[Route('/{id}', name: 'app_order_index', methods: ['GET'])]
-    public function index(OrderRepository $orderRepository, UserCustomer $userCustomer): Response
+    public function index(OrderRepository $orderRepository, User $user): Response
     {
-        $orders = $userCustomer->getOrders();
+        $orders = $user->getOrders();
 
         return $this->render('order/index.html.twig', [
             'orders' => $orders,

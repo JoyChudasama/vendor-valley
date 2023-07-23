@@ -3,7 +3,6 @@
 namespace App\Command;
 
 use App\Entity\User;
-use App\Entity\UserCustomer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -50,10 +49,6 @@ class CreateAdminUserCommand extends Command
         $user->setFirstName('Joy');
         $user->setLastName('Chudasama');
         
-        $userCustomer = new UserCustomer();
-        $userCustomer->setUser($user);
-        $user->setUserCustomer($userCustomer);
-
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 

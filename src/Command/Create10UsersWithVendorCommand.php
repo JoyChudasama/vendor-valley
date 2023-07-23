@@ -3,7 +3,6 @@
 namespace App\Command;
 
 use App\Entity\User;
-use App\Entity\UserCustomer;
 use App\Entity\Vendor;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -99,7 +98,6 @@ class Create10UsersWithVendorCommand extends Command
             $hashedPassword = $this->passwordHasher->hashPassword($userEntity, $passowrd);
             $userEntity->setPassword($hashedPassword);
 
-            $this->createUserCustomer($userEntity);
             $this->createVendor($userEntity);
 
             $this->entityManagerInterface->persist($userEntity);
@@ -110,14 +108,6 @@ class Create10UsersWithVendorCommand extends Command
         $io->success('Users & Vendors created successfully!!!');
 
         return Command::SUCCESS;
-    }
-
-    private function createUserCustomer(User $user): void
-    {
-        $userCustomer = new UserCustomer();
-        $userCustomer->setUser($user);
-
-        $user->setUserCustomer($userCustomer);
     }
 
     private function createVendor(User $user): void
