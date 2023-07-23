@@ -15,7 +15,8 @@ class OrderHelper
     public function __construct(
         private EntityManagerInterface $entityManagerInterface,
         private Security $security,
-        private ProductRepository $productRepository
+        private ProductRepository $productRepository,
+        private float $govTaxRate
     ) {
     }
 
@@ -27,9 +28,10 @@ class OrderHelper
 
         $order = new Order();
         $order->setUser($user);
-        $order->setTotalAmount($cart->getTotalAmount());
         $order->setOrderNumber($this->createOrderNumber());
-        
+        $totalAmount = ($this->govTaxRate / 100) * $cart->getTotalAmount();
+        $order->setTotalAmount($totalAmount);
+
         foreach ($cartItems as $cartItem) {
             $orderItem = $this->createOrderItem($cartItem, $order);
             $order->addOrderItem($orderItem);

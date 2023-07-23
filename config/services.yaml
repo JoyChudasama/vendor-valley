@@ -14,6 +14,8 @@ services:
         bind:
             $stripeApiKey: "%env(resolve:STRIPE_API_KEY)%"
             $vendorValleyEmail: "%env(resolve:VENDOR_VALLEY_EMAIL)%"
+            $govTaxRate: "%env(resolve:GOV_TAX_RATE)%"
+            $vendorValleyRate: "%env(resolve:VENDOR_VALLEY_RATE)%"
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:

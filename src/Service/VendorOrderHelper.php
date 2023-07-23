@@ -13,7 +13,8 @@ class VendorOrderHelper
 {
     public function __construct(
         private VendorRepository $vendorRepository,
-        private EntityManagerInterface $entityManagerInterface
+        private EntityManagerInterface $entityManagerInterface,
+        private float $vendorValleyRate
     ) {
     }
 
@@ -28,20 +29,25 @@ class VendorOrderHelper
 
         foreach ($orderItemsByVendorId as $vendorId => $orderItems) {
             $vendor = $this->vendorRepository->find($vendorId);
+            $totalAmount = 0;
 
             $vendorOrder = new VendorOrder();
             $vendorOrder->setVendor($vendor);
+            $vendorOrder->setOrderNumber($order->getOrderNumber());
 
             foreach ($orderItems as $orderItem) {
                 $vendorOrderItem = $this->createVendorOrderItem($orderItem, $vendorOrder);
                 $vendorOrder->addVendorOrderItem($vendorOrderItem);
+                $totalAmount += $vendorOrderItem->getTotalAmount();
             }
+            
+            $vendorOrder->setTotalAmount($totalAmount);
 
             $vendor->addVendorOrder($vendorOrder);
 
             $this->entityManagerInterface->persist($vendorOrder);
         }
-        
+
         $this->entityManagerInterface->flush();
     }
 

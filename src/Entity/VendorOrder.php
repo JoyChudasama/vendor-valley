@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\VendorOrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VendorOrderRepository::class)]
@@ -21,6 +22,12 @@ class VendorOrder extends Base
 
     #[ORM\OneToMany(mappedBy: 'vendorOrder', targetEntity: VendorOrderItem::class, cascade: ['persist', 'remove'])]
     private Collection $vendorOrderItems;
+
+    #[ORM\Column(length: 255)]
+    private ?string $orderNumber = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: '0')]
+    private ?string $totalAmount = null;
 
     public function __construct()
     {
@@ -70,6 +77,30 @@ class VendorOrder extends Base
                 $vendorOrderItem->setVendorOrder(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getOrderNumber(): ?string
+    {
+        return $this->orderNumber;
+    }
+
+    public function setOrderNumber(string $orderNumber): static
+    {
+        $this->orderNumber = $orderNumber;
+
+        return $this;
+    }
+
+    public function getTotalAmount(): ?string
+    {
+        return $this->totalAmount;
+    }
+
+    public function setTotalAmount(string $totalAmount): static
+    {
+        $this->totalAmount = $totalAmount;
 
         return $this;
     }

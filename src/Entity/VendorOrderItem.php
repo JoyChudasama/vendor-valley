@@ -6,7 +6,7 @@ use App\Repository\VendorOrderItemRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VendorOrderItemRepository::class)]
-class VendorOrderItem
+class VendorOrderItem extends Base
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -61,5 +61,10 @@ class VendorOrderItem
         $this->vendorOrder = $vendorOrder;
 
         return $this;
+    }
+
+    public function getTotalAmount()
+    {
+        return $this->quantity * $this->product->getPrice();
     }
 }

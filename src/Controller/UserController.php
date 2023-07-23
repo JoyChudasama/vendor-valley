@@ -8,6 +8,7 @@ use App\Repository\UserRepository;
 use App\Service\UserRegistrationHelper;
 use App\Service\UserVendorHelper;
 use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
+    #[Security("is_granted('ROLE_ADMIN')")]
     public function index(UserRepository $userRepository): Response
     {
         return $this->render('user/index.html.twig', [
@@ -57,6 +59,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
+    #[Security("is_granted('ROLE_USER')")]
     public function edit(Request $request, User $user, UserRepository $userRepository, UserVendorHelper $userVendorHelper): Response
     {
         $form = $this->createForm(UserType::class, $user, [
@@ -85,6 +88,7 @@ class UserController extends AbstractController
 
 
     #[Route('/profile-{id}', name: 'app_user_profile', methods: ['GET'])]
+    #[Security("is_granted('ROLE_USER')")]
     public function show(User $user): Response
     {
         $form = $this->createForm(UserType::class, $user, [
@@ -98,6 +102,7 @@ class UserController extends AbstractController
     }
     
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
+    #[Security("is_granted('ROLE_USER')")]
     public function delete(Request $request, User $user, UserRepository $userRepository): Response
     {
         if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {

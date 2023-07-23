@@ -24,7 +24,15 @@
 			<div class="col-sm-12 col-md-12 col-lg-12">
 
 				{% for order in orders %}
-					{{include('components/order_card.html.twig')}}
+					{{include('components/order_card.html.twig',
+						{
+							orderNumber:order.orderNumber, 
+							createdAt:order.createdAt,
+							viewOrderLink:'#',
+							numberOfItems:order.orderItems|length,
+							totalAmount:order.totalAmount
+						})
+					}}
 				{% else %}
 					No Orders Found
 				{% endfor %}

@@ -43,7 +43,7 @@ class ProductType extends AbstractType
                 'mapped' => false,
                 'multiple' => true,
             ])
-            ->add('quantity', NumberType::class, [
+            ->add('availableUnits', NumberType::class, [
                 'required' => true,
                 'label' => 'Available Quantity',
             ]);
