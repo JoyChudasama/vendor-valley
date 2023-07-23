@@ -2,11 +2,17 @@
 
 namespace App\Service;
 
+use App\Entity\Cart;
 use App\Entity\CartItem;
 use App\Entity\Order;
+use App\Entity\OrderInvoice;
 use App\Entity\OrderItem;
+use App\Entity\Product;
+use App\Entity\User;
 use App\Repository\ProductRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -16,31 +22,45 @@ class OrderHelper
         private EntityManagerInterface $entityManagerInterface,
         private Security $security,
         private ProductRepository $productRepository,
-        private float $govTaxRate
+        private float $federalTaxRate,
+        private float $provincialTaxRate,
+        private EmailHelper $emailHelper
     ) {
     }
 
-    public function createOrder(Session $session): Order
+    public function handleOrder(Session $session): Order
     {
         $cart = $session->get('cart');
-        $cartItems = $cart->getCartItems();
+
+        $this->updateProductQuantity($cart);
+
         $user = $this->security->getUser();
-
-        $order = new Order();
-        $order->setUser($user);
-        $order->setOrderNumber($this->createOrderNumber());
-        $totalAmount = ($this->govTaxRate / 100) * $cart->getTotalAmount();
-        $order->setTotalAmount($totalAmount);
-
-        foreach ($cartItems as $cartItem) {
-            $orderItem = $this->createOrderItem($cartItem, $order);
-            $order->addOrderItem($orderItem);
-        }
+        $order = $this->createOrder($cart, $user);
 
         $user->addOrder($order);
 
         $this->entityManagerInterface->persist($order);
         $this->entityManagerInterface->flush();
+
+        $this->emailHelper->sendOrderPlacedEmail($order);
+
+        return $order;
+    }
+
+    private function createOrder(Cart $cart, User $user): Order
+    {
+        $order = new Order();
+        $order->setUser($user);
+        $order->setOrderNumber($this->createOrderNumber());
+        $order->setSubTotal($cart->getTotalAmount());
+
+        $cartItems = $cart->getCartItems();
+
+        foreach ($cartItems as $cartItem) {
+            $this->createOrderItem($cartItem, $order);
+        }
+
+        $this->createOrderInvoice($order);
 
         return $order;
     }
@@ -57,6 +77,8 @@ class OrderHelper
         $orderItem->setQuantity($cartItem->getQuantity());
         $orderItem->setRelatedOrder($order);
 
+        $order->addOrderItem($orderItem);
+
         return $orderItem;
     }
 
@@ -66,5 +88,60 @@ class OrderHelper
         $orderNumber = $dateTime->format('YmdHisu');
 
         return $orderNumber;
+    }
+
+    private function createOrderInvoice(Order $order): OrderInvoice
+    {
+        $orderInvoice = new OrderInvoice();
+        $orderInvoice->setRelatedOrder($order);
+
+        $subTotal = $order->getSubTotal();
+        $federalTaxAmount = ($this->federalTaxRate / 100) * $subTotal;
+        $provincialTaxAmount = ($this->provincialTaxRate / 100) * $subTotal;
+        $grandTotal = $subTotal + $federalTaxAmount + $provincialTaxAmount;
+
+        $orderInvoice->setSubTotal($subTotal);
+        $orderInvoice->setFedTaxAmount($federalTaxAmount);
+        $orderInvoice->setprovincialTaxAmount($provincialTaxAmount);
+        $orderInvoice->setGrandTotal($grandTotal);
+        $orderInvoice->setInvoiceNumber($this->createOrderInvoiceNumber());
+
+        $order->setOrderInvoice($orderInvoice);
+
+        return $orderInvoice;
+    }
+
+    private function createOrderInvoiceNumber(): string
+    {
+        $orderNumber = $this->createOrderNumber();
+
+        $randomNumber = rand(0, 60);
+
+        $second = intval((new DateTime())->format('s'));
+
+        $diff = $second - $randomNumber;
+
+        if ($diff < 0) $diff += 60;
+
+        $diffFormatted = str_pad($diff, 2, '0', STR_PAD_LEFT);
+
+        return $orderNumber . $diffFormatted;
+    }
+
+    private function updateProductQuantity(Cart $cart): void
+    {
+        $cartItems = $cart->getCartItems();
+        
+        foreach ($cartItems as $cartItem) {
+            $product = $cartItem->getProduct();
+            $product = $this->productRepository->find($product->getId());
+
+            $product->setAvailableUnits($product->getAvailableUnits() - $cartItem->getQuantity());
+
+            if ($product->getAvailableUnits() <= 0) $product->setIsAvailable(false);
+
+            $this->entityManagerInterface->flush();
+        }
+
     }
 }

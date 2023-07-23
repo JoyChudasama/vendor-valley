@@ -1,0 +1,32 @@
+<table class="table">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Description</th>
+			<th>Price</th>
+			<th>Available</th>
+			<th>Listed</th>
+			<th>Units Available</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for product in products %}
+			<tr>
+				<td>{{ product.name }}</td>
+				<td>{{ product.description|shorten(50) }}</td>
+				<td>{{ product.price|currency }}</td>
+				<td>{{ product.isAvailable ? 'Yes' : 'No' }}</td>
+				<td>{{ product.isListed ? 'Yes' : 'No' }}</td>
+				<td>{{ product.availableUnits }}</td>
+				<td>
+					{{include('components/actions_dropdown.html.twig',{editLink:path('app_product_edit', {'id': product.id}), deleteFormPath: "product/_delete_form.html.twig"})}}
+				</td>
+			</tr>
+		{% else %}
+			<tr>
+				<td colspan="7">No Products Found</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>

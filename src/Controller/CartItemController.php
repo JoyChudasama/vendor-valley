@@ -54,7 +54,7 @@ class CartItemController extends AbstractController
         }
     }
 
-    #[Route('/{id}/increase/quantity', name: 'app_cart_item_increase_quantity', methods: ['GET', 'POST'])]
+    #[Route('/{id}/quantity/increase', name: 'app_cart_item_increase_quantity', methods: ['GET', 'POST'])]
     public function increaseQuantity(Request $request, CartItemHelper $cartItemHelper, Product $product): JsonResponse
     {
         try {
@@ -74,7 +74,7 @@ class CartItemController extends AbstractController
         }
     }
 
-    #[Route('/{id}/decrease/quantity', name: 'app_cart_item_decrease_quantity', methods: ['GET', 'POST'])]
+    #[Route('/{id}/quantity/decrease', name: 'app_cart_item_decrease_quantity', methods: ['GET', 'POST'])]
     public function decreaseQuantity(Request $request, CartItemHelper $cartItemHelper, Product $product): JsonResponse
     {
         try {

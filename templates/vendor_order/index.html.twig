@@ -3,7 +3,7 @@
 {% block title %}
 	{{app.user.vendor}}
 	|
-												Orders
+	Orders
 {% endblock %}
 
 {% block stylesheets %}
@@ -31,7 +31,7 @@
                             createdAt:vendorOrder.createdAt,
                             viewOrderLink:'#',
                             numberOfItems:vendorOrder.vendorOrderItems|length,
-                            totalAmount:vendorOrder.totalAmount,
+                            grandTotal:vendorOrder.vendorOrderInvoice.grandTotal,
                         })
                     }}
 

@@ -1,21 +1,33 @@
 <div class="card mb-5">
 	<div class="card-body">
 		<div class="row align-content-start">
-			<div class="col-10 d-flex">
-				<h5 class="card-title">Order#{{orderNumber}}</h5>
-				<span class="ms-3">{{createdAt|date('M j, Y')}}</span>
-				<span class="ms-3">{{status is defined ? status : ''}}</span>
+			<div class="col-10">
+				<div class="row">
+					<div class="col-12 d-flex">
+						<h5 class="card-title">Order#{{orderNumber}}</h5>
+						<span class="ms-3">{{createdAt|date('M j, Y')}}</span>
+						<span class="ms-3">{{status is defined ? status : ''}}</span>
+					</div>
+					<div class="col-12">
+						<p class="card-text">Number of Items:
+							{{numberOfItems}}</p>
+						<p class="card-text">Total:
+							{{grandTotal|currency}}</p>
+					</div>
+				</div>
 			</div>
 			<div class="col-2">
-				<a href="{{viewOrderLink}}" class="btn btn-primary float-end">View Order</a>
+				<div class="row flex-column gap-3">
+					<div class="col-auto">
+						<a href="{{viewOrderLink}}" class="btn btn-primary float-end">Order Details</a>
+					</div>
+					<div class="col-auto">
+						<a href="{{viewOrderLink}}" class="btn btn-primary float-end">Invoice</a>
+					</div>
+				</div>
 			</div>
 		</div>
 
-		<div>
-			<p class="card-text">Number of Items:
-				{{numberOfItems}}</p>
-			<p class="card-text">Total:
-				{{totalAmount|currency}}</p>
-		</div>
+
 	</div>
 </div>

@@ -30,7 +30,7 @@
 							createdAt:order.createdAt,
 							viewOrderLink:'#',
 							numberOfItems:order.orderItems|length,
-							totalAmount:order.totalAmount
+							grandTotal:order.orderInvoice.grandTotal
 						})
 					}}
 				{% else %}

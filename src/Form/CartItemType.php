@@ -16,6 +16,9 @@ class CartItemType extends AbstractType
         $builder
             ->add('quantity', IntegerType::class, [
                 'required' => true,
+                'attr'=>[
+                    'readonly'=>'readonly'
+                ]
             ])
             ->add('product', TextType::class, [
                 'required' => true

@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Service\CheckoutHelper;
-use App\Service\EmailHelper;
 use App\Service\OrderHelper;
 use App\Service\VendorOrderHelper;
 use Exception;
@@ -26,20 +25,22 @@ class CheckoutController extends AbstractController
             $this->addFlash('error', 'Something went wrong. Could not process the payment. Please try again.');
             return $this->redirectToRoute('app_cart_show');
         }
-
+   
         return $this->redirect($checkoutSession->url);
     }
 
     #[Route('/checkout-success', name: 'app_checkout_success')]
-    public function checkoutSuccess(Request $request, OrderHelper $orderHelper, EmailHelper $emailHelper, VendorOrderHelper $vendorOrderHelper): Response
-    {
+    public function checkoutSuccess(
+        Request $request,
+        OrderHelper $orderHelper,
+        VendorOrderHelper $vendorOrderHelper
+    ): Response {
         $session = $request->getSession();
         $user = $this->getUser();
 
         try {
-            $order = $orderHelper->createOrder($session);
-            $vendorOrderHelper->createVendorOrders($order);
-            $emailHelper->sendOrderPlacedEmail($order);
+            $order = $orderHelper->handleOrder($session);
+            $vendorOrderHelper->handleVendorOrders($order);
         } catch (Exception $e) {
             $this->addFlash('error', $e);
             return $this->redirect('app_cart_show');

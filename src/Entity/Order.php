@@ -18,7 +18,7 @@ class Order extends Base
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: '0')]
-    private ?string $totalAmount = null;
+    private ?string $subTotal = null;
 
     #[ORM\OneToMany(mappedBy: 'relatedOrder', targetEntity: OrderItem::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
     private Collection $orderItems;
@@ -28,6 +28,9 @@ class Order extends Base
 
     #[ORM\Column(length: 255)]
     private ?string $orderNumber = null;
+
+    #[ORM\OneToOne(mappedBy: 'relatedOrder', cascade: ['persist', 'remove'])]
+    private ?OrderInvoice $orderInvoice = null;
 
     public function __construct()
     {
@@ -39,14 +42,14 @@ class Order extends Base
         return $this->id;
     }
 
-    public function getTotalAmount(): ?string
+    public function getSubTotal(): ?string
     {
-        return $this->totalAmount;
+        return $this->subTotal;
     }
 
-    public function setTotalAmount(string $totalAmount): static
+    public function setSubTotal(string $subTotal): static
     {
-        $this->totalAmount = $totalAmount;
+        $this->subTotal = $subTotal;
 
         return $this;
     }
@@ -101,6 +104,28 @@ class Order extends Base
     public function setOrderNumber(string $orderNumber): static
     {
         $this->orderNumber = $orderNumber;
+
+        return $this;
+    }
+
+    public function getOrderInvoice(): ?OrderInvoice
+    {
+        return $this->orderInvoice;
+    }
+
+    public function setOrderInvoice(?OrderInvoice $orderInvoice): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($orderInvoice === null && $this->orderInvoice !== null) {
+            $this->orderInvoice->setRelatedOrder(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($orderInvoice !== null && $orderInvoice->getRelatedOrder() !== $this) {
+            $orderInvoice->setRelatedOrder($this);
+        }
+
+        $this->orderInvoice = $orderInvoice;
 
         return $this;
     }

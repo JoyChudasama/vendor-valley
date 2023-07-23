@@ -27,7 +27,10 @@ class VendorOrder extends Base
     private ?string $orderNumber = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: '0')]
-    private ?string $totalAmount = null;
+    private ?string $subTotal = null;
+
+    #[ORM\OneToOne(mappedBy: 'vendorOrder', cascade: ['persist', 'remove'])]
+    private ?VendorOrderInvoice $vendorOrderInvoice = null;
 
     public function __construct()
     {
@@ -93,14 +96,36 @@ class VendorOrder extends Base
         return $this;
     }
 
-    public function getTotalAmount(): ?string
+    public function getSubTotal(): ?string
     {
-        return $this->totalAmount;
+        return $this->subTotal;
     }
 
-    public function setTotalAmount(string $totalAmount): static
+    public function setSubTotal(string $subTotal): static
     {
-        $this->totalAmount = $totalAmount;
+        $this->subTotal = $subTotal;
+
+        return $this;
+    }
+
+    public function getVendorOrderInvoice(): ?VendorOrderInvoice
+    {
+        return $this->vendorOrderInvoice;
+    }
+
+    public function setVendorOrderInvoice(?VendorOrderInvoice $vendorOrderInvoice): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($vendorOrderInvoice === null && $this->vendorOrderInvoice !== null) {
+            $this->vendorOrderInvoice->setVendorOrder(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($vendorOrderInvoice !== null && $vendorOrderInvoice->getVendorOrder() !== $this) {
+            $vendorOrderInvoice->setVendorOrder($this);
+        }
+
+        $this->vendorOrderInvoice = $vendorOrderInvoice;
 
         return $this;
     }

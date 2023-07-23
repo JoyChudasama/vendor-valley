@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\CartItem;
+use Exception;
 use Stripe\Checkout\Session as CheckoutSession;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -24,6 +25,10 @@ class CheckoutHelper
         return $stripe->checkout->sessions->create([
             'line_items' => $this->getLineItems($session),
             'mode' => 'payment',
+            'automatic_tax' => [
+                'enabled' => true,
+            ],
+            'billing_address_collection' => 'required',
             'success_url' => $this->urlGeneratorInterface->generate('app_checkout_success', [], UrlGeneratorInterface::ABSOLUTE_URL),
             'cancel_url' => $this->urlGeneratorInterface->generate('app_checkout_failed', [], UrlGeneratorInterface::ABSOLUTE_URL),
         ]);

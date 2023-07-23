@@ -1,0 +1,49 @@
+<div class="email-container">
+	<h2 class="header">Vendor Valley Order Confirmation</h2>
+
+	<p class="order-number">Order #{{vendor_order.orderNumber}}</p>
+
+	<p class="greetings">Hello
+		{{vendor}},</p>
+
+	<p class="message">
+		New Order from VendorValley.com has been created. Please review following information.
+	</p>
+
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Item</th>
+				<th>Quantity</th>
+				<th>Amount</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% set totalItems = 0 %}
+			{% set totalAmount = 0 %}
+
+			{% for item in vendor_order.vendorOrderItems %}
+				{% set totalItems = item.quantity + totalItems %}
+				{% set totalAmount = item.getTotalAmount + totalAmount %}
+
+				<tr>
+					<td>{{item.product}}</td>
+					<td>{{item.quantity}}</td>
+					<td>{{item.getTotalAmount|currency}}</td>
+				</tr>
+			{% endfor %}
+			<tr>
+				<td>TOTAL</td>
+				<td>{{totalItems}}</td>
+				<td>{{totalAmount|currency}}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h5>
+		We hope to see you again soon!<br/>
+		VendorValley.com
+	</h5>
+
+</div>
