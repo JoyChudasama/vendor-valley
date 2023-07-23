@@ -1,0 +1,51 @@
+<div class="email-container">
+	<h2 class="header">Vendor Valley Order Confirmation</h2>
+
+	<p class="order-number">Order #{{order.orderNumber}}</p>
+
+	<p class="greetings">Hello
+		{{user}},</p>
+
+	<p class="message">
+		Thank you for shopping with us. We thought you'd like to know that your order is placed. Your order is on its way,
+		<br/>and can no longer be changed. If you need to return an item from this shipment or manage other orders,
+		<br/>please visit Your Orders on VendorValley.com
+	</p>
+
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Item</th>
+				<th>Quantity</th>
+				<th>Amount</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% set totalItems = 0 %}
+			{% set totalAmount = 0 %}
+
+			{% for item in order.orderItems %}
+				{% set totalItems = item.quantity + totalItems %}
+				{% set totalAmount = item.getTotalAmount + totalAmount %}
+
+				<tr>
+					<td>{{item.product}}</td>
+					<td>{{item.quantity}}</td>
+					<td>{{item.getTotalAmount|currency}}</td>
+				</tr>
+			{% endfor %}
+			<tr>
+				<td>TOTAL</td>
+				<td>{{totalItems}}</td>
+				<td>{{totalAmount|currency}}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h5>
+		We hope to see you again soon!<br/>
+		VendorValley.com
+	</h5>
+
+</div>

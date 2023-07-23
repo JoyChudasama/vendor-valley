@@ -26,6 +26,9 @@ class Order extends Base
     #[ORM\ManyToOne(inversedBy: 'orders')]
     private ?User $user = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $orderNumber = null;
+
     public function __construct()
     {
         $this->orderItems = new ArrayCollection();
@@ -86,6 +89,18 @@ class Order extends Base
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getOrderNumber(): ?string
+    {
+        return $this->orderNumber;
+    }
+
+    public function setOrderNumber(string $orderNumber): static
+    {
+        $this->orderNumber = $orderNumber;
 
         return $this;
     }

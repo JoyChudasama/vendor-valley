@@ -1,18 +1,20 @@
-<div class="card ">
+<div class="card mb-5">
 	<div class="card-body">
 		<div class="row align-content-start">
-			<div class="col-10">
-				<h5 class="card-title fw-bold">Order #9501785203</h5>
+			<div class="col-10 d-flex">
+				<h5 class="card-title">Order#{{order.orderNumber}}</h5>
+				<span class="ms-3">{{order.createdAt|date('M j, Y')}}</span>
 			</div>
 			<div class="col-2">
 				<a href="#" class="btn btn-primary float-end">View Order</a>
 			</div>
 		</div>
 
-		<div class="">
-			<p class="card-text text-muted">Ordered On: {{order.orderItems|length}}</p>
-			<p class="card-text text-muted">Ordered Items: {{order.orderItems|length}}</p>
-			<p class="card-text text-muted">Order Total: {{order.totalAmount|currency}}</p>
+		<div>
+			<p class="card-text">Number of Items:
+				{{order.orderItems|length}}</p>
+			<p class="card-text">Total:
+				{{order.totalAmount|currency}}</p>
 		</div>
 	</div>
 </div>

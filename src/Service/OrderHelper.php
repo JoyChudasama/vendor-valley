@@ -19,7 +19,7 @@ class OrderHelper
     ) {
     }
 
-    public function createOrder(Session $session): void
+    public function createOrder(Session $session): Order
     {
         $cart = $session->get('cart');
         $cartItems = $cart->getCartItems();
@@ -28,7 +28,7 @@ class OrderHelper
         $order = new Order();
         $order->setUser($user);
         $order->setTotalAmount($cart->getTotalAmount());
-
+        $order->setOrderNumber($this->createOrderNumber());
         foreach ($cartItems as $cartItem) {
             $orderItem = $this->createOrderItem($cartItem, $order);
             $order->addOrderItem($orderItem);
@@ -38,12 +38,14 @@ class OrderHelper
 
         $this->entityManagerInterface->persist($order);
         $this->entityManagerInterface->flush();
+
+        return $order;
     }
 
     private function createOrderItem(CartItem $cartItem, Order $order): OrderItem
     {
         $orderItem = new OrderItem();
-        
+
         // Need to find fix this. Not sure if entity relation is wrong with Product. 
         $product = $cartItem->getProduct();
         $product = $this->productRepository->find($product->getId());
@@ -53,5 +55,13 @@ class OrderHelper
         $orderItem->setRelatedOrder($order);
 
         return $orderItem;
+    }
+
+    private function createOrderNumber(): string
+    {
+        $dateTime = new \DateTime();
+        $orderNumber = $dateTime->format('YmdHisu');
+
+        return $orderNumber;
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\CheckoutHelper;
+use App\Service\EmailHelper;
 use App\Service\OrderHelper;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,18 +30,19 @@ class CheckoutController extends AbstractController
     }
 
     #[Route('/checkout-success', name: 'app_checkout_success')]
-    public function checkoutSuccess(Request $request, OrderHelper $orderHelper): Response
+    public function checkoutSuccess(Request $request, OrderHelper $orderHelper, EmailHelper $emailHelper): Response
     {
         $session = $request->getSession();
         $user = $this->getUser();
 
-        $orderHelper->createOrder($session);
+        $order = $orderHelper->createOrder($session);
+        $emailHelper->sendOrderPlacedEmail($order);
 
         $session->remove('cart');
 
         $this->addFlash('success', 'Order placed successfully. You will recieve an order confirmation email shortly. Thank you for shopping with us.');
-        
-        return $this->redirectToRoute('app_order_index', ['id'=>$user->getId()], 303);
+
+        return $this->redirectToRoute('app_order_index', ['id' => $user->getId()], 303);
     }
 
     #[Route('/checkout-failed', name: 'app_checkout_failed')]

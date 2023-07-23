@@ -63,4 +63,9 @@ class OrderItem extends Base
 
         return $this;
     }
+
+    public function getTotalAmount()
+    {
+        return $this->quantity * $this->product->getPrice();
+    }
 }
